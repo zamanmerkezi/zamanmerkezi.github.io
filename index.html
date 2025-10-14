@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ZAMAN MERKEZİ ⏰</title>
+
+  <style>
+    /* ======== GENEL TASARIM ======== */
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      text-align: center;
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: center;
+      color: white;
+      transition: background 0.5s ease, color 0.5s ease;
+      background-size: cover;
+      background-position: center;
+    }
+
+    h1 {
+      margin-top: 20px;
+      text-shadow: 2px 2px 5px black;
+    }
+
+    .panel {
+      background-color: rgba(0, 0, 0, 0.5);
+      border-radius: 12px;
+      padding: 20px;
+      margin: 15px;
+      width: 90%;
+      max-width: 400px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.4);
+    }
+
+    button, select, input {
+      margin: 5px;
+      padding: 10px 15px;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      opacity: 0.8;
+    }
+
+    /* ======== RENK TEMALARI ======== */
+    body.tema-acik { background: #f0f0f0; color: #222; }
+    body.tema-koyu { background: #121212; color: #eee; }
+    body.tema-mavi { background: linear-gradient(135deg, #2196f3, #0d47a1); }
+    body.tema-yesil { background: linear-gradient(135deg, #4caf50, #1b5e20); }
+    body.tema-mor { background: linear-gradient(135deg, #9c27b0, #4a148c); }
+    body.tema-doga { background-image: url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1470&q=80'); }
+    body.tema-gece { background-image: url('https://images.unsplash.com/photo-1444703686981-a3abbc4d4fe3?auto=format&fit=crop&w=1470&q=80'); }
+    body.tema-soyut { background-image: url('https://images.unsplash.com/photo-1529333166437-7750a6dd5a70?auto=format&fit=crop&w=1470&q=80'); }
+
+    /* ======== METİN BOYUTLARI ======== */
+    #saat, #kronometre, #geriSayim {
+      font-size: 2.5em;
+      font-weight: bold;
+      margin: 10px 0;
+      text-shadow: 2px 2px 4px black;
+    }
+
+    /* Alarm bildirimi */
+    #alarmDurum {
+      margin-top: 10px;
+      font-size: 1em;
+      font-style: italic;
+    }
+
+    /* Mobil uyum */
+    @media (max-width: 600px) {
+      #saat, #kronometre, #geriSayim {
+        font-size: 2em;
+      }
+
+      /* Reklam kutularını mobilde gizle */
+      .reklam-sol, .reklam-sag {
+        display: none;
+      }
+    }
+
+    /* ======== REKLAM KUTULARI ======== */
+    .reklam-sol, .reklam-sag {
+      position: fixed;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 150px;
+      height: 300px;
+      background-color: rgba(255, 255, 255, 0.1);
+      border: 2px dashed rgba(255, 255, 255, 0.4);
+      color: white;
+      text-shadow: 1px 1px 2px black;
+      font-size: 1em;
+      text-align: center;
+      padding: 15px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.4);
+      z-index: 1000;
+    }
+
+    .reklam-sol { left: 10px; }
+    .reklam-sag { right: 10px; }
+
+    .reklam-sol:hover, .reklam-sag:hover {
+      background-color: rgba(255, 255, 255, 0.2);
+      transition: background 0.3s ease;
+    }
+
+  </style>
+</head>
+
+<body class="tema-gece">
+  <h1>🕒 ZAMAN MERKEZİ</h1>
+
+  <!-- ======== TEMA SEÇİCİ ======== -->
+  <div class="panel">
+    <h3>🎨 Tema Seç</h3>
+    <select id="temaSec">
+      <option value="tema-gece">Gece Gökyüzü 🌌</option>
+      <option value="tema-doga">Doğa 🌿</option>
+      <option value="tema-soyut">Soyut 🎨</option>
+      <option value="tema-acik">Açık ☀️</option>
+      <option value="tema-koyu">Koyu 🌑</option>
+      <option value="tema-mavi">Mavi 💙</option>
+      <option value="tema-yesil">Yeşil 💚</option>
+      <option value="tema-mor">Mor 💜</option>
+    </select>
+  </div>
+
+  <!-- ======== SAAT ve TARİH ======== -->
+  <div class="panel" id="saatPanel">
+    <h3>⏰ Saat ve Tarih</h3>
+    <div id="saat"></div>
+    <div id="tarih"></div>
+  </div>
+
+  <!-- ======== KRONOMETRE ======== -->
+  <div class="panel">
+    <h3>⏱️ Kronometre</h3>
+    <div id="kronometre">00:00</div>
+    <button id="kronBaslat">Başlat</button>
+    <button id="kronDurdur">Durdur</button>
+    <button id="kronSifirla">Sıfırla</button>
+    <button id="saatGosterBtn">🕒 Saat Panelini Göster / Gizle</button>
+  </div>
+
+  <!-- ======== GERİ SAYIM ======== -->
+  <div class="panel">
+    <h3>⏳ Geri Sayım</h3>
+    <div id="geriSayim">00:10</div>
+    <input type="number" id="geriSure" placeholder="Süre (sn)" min="1">
+    <button id="geriBaslat">Başlat</button>
+    <button id="geriDur">Durdur</button>
+    <button id="geriSifirla">Sıfırla</button>
+  </div>
+
+  <!-- ======== ALARM ======== -->
+  <div class="panel">
+    <h3>🔔 Alarm</h3>
+    <input type="time" id="alarmZaman">
+    <button id="alarmKur">Kur</button>
+    <button id="alarmIptal">İptal</button>
+    <div id="alarmDurum">Alarm kurulmadı.</div>
+  </div>
+
+  <!-- ======== REKLAM KUTULARI ======== -->
+  <div class="reklam-sol">
+    🔸 Reklam Alanı 1 🔸<br><br>
+    Buraya reklam veya görsel kodu ekleyebilirsin.
+  </div>
+
+  <div class="reklam-sag">
+    🔹 Reklam Alanı 2 🔹<br><br>
+    Buraya reklam veya banner yerleştirilebilir.
+  </div>
+
+  <audio id="alarmSes">
+    <source src="https://www.soundjay.com/misc/sounds/bell-ringing-05.mp3" type="audio/mpeg">
+  </audio>
+
+  <script>
+    /* ==================  SAAT ve TARİH  ================== */
+    function guncelSaatiGoster() {
+      const simdi = new Date();
+      const saat = simdi.toLocaleTimeString("tr-TR");
+      const tarih = simdi.toLocaleDateString("tr-TR", {
+        weekday: "long", year: "numeric", month: "long", day: "numeric"
+      });
+      document.getElementById("saat").textContent = saat;
+      document.getElementById("tarih").textContent = tarih;
+    }
+    setInterval(guncelSaatiGoster, 1000);
+    guncelSaatiGoster();
+
+    /* ==================  KRONOMETRE ================== */
+    let kronSaniye = 0;
+    let kronAktif = false;
+    let kronInterval;
+    const kronEl = document.getElementById("kronometre");
+
+    function kronGuncelle() {
+      let saat = String(Math.floor(kronSaniye / 3600)).padStart(2, '0');
+      let dakika = String(Math.floor((kronSaniye % 3600) / 60)).padStart(2, '0');
+      let saniye = String(kronSaniye % 60).padStart(2, '0');
+      kronEl.textContent = `${saat}:${dakika}:${saniye}`;
+    }
+
+    document.getElementById("kronBaslat").onclick = () => {
+      if (kronAktif) return;
+      kronAktif = true;
+      kronInterval = setInterval(() => { kronSaniye++; kronGuncelle(); }, 1000);
+    };
+    document.getElementById("kronDurdur").onclick = () => {
+      clearInterval(kronInterval); kronAktif = false;
+    };
+    document.getElementById("kronSifirla").onclick = () => {
+      clearInterval(kronInterval);
+      kronSaniye = 0; kronAktif = false; kronGuncelle();
+    };
+
+    /* ==================  SAAT GÖSTER/GİZLE ================== */
+    document.getElementById("saatGosterBtn").onclick = () => {
+      const panel = document.getElementById("saatPanel");
+      panel.style.display = (panel.style.display === "none") ? "block" : "none";
+    };
+
+    /* ==================  GERİ SAYIM ================== */
+    let geriSure = 10;
+    let geriAktif = false;
+    let geriInterval;
+    const geriEl = document.getElementById("geriSayim");
+
+    function geriGuncelle() {
+      let dakika = String(Math.floor(geriSure / 60)).padStart(2, '0');
+      let saniye = String(geriSure % 60).padStart(2, '0');
+      geriEl.textContent = `${dakika}:${saniye}`;
+    }
+
+    document.getElementById("geriBaslat").onclick = () => {
+      if (geriAktif || geriSure <= 0) return;
+      geriAktif = true;
+      geriInterval = setInterval(() => {
+        if (geriSure > 0) {
+          geriSure--; geriGuncelle();
+        } else {
+          clearInterval(geriInterval);
+          geriAktif = false;
+          alert("⏰ Süre doldu!");
+        }
+      }, 1000);
+    };
+    document.getElementById("geriDur").onclick = () => {
+      clearInterval(geriInterval); geriAktif = false;
+    };
+    document.getElementById("geriSifirla").onclick = () => {
+      clearInterval(geriInterval);
+      geriSure = 10; geriAktif = false; geriGuncelle();
+    };
+    document.getElementById("geriSure").oninput = e => {
+      geriSure = parseInt(e.target.value) || 0;
+      geriGuncelle();
+    };
+    geriGuncelle();
+
+    /* ==================  ALARM ================== */
+    const alarmSes = document.getElementById("alarmSes");
+    const alarmDurum = document.getElementById("alarmDurum");
+    let alarmZamani = null;
+    let alarmKontrol;
+
+    document.getElementById("alarmKur").onclick = () => {
+      const input = document.getElementById("alarmZaman").value;
+      if (!input) return alert("Lütfen bir saat seçin!");
+      alarmZamani = input;
+      alarmDurum.textContent = `Alarm kuruldu: ${alarmZamani}`;
+      alarmKontrol = setInterval(() => {
+        const simdi = new Date();
+        const saatStr = simdi.toTimeString().slice(0,5);
+        if (saatStr === alarmZamani) {
+          alarmSes.play();
+          alert("🔔 Alarm zamanı!");
+          clearInterval(alarmKontrol);
+          alarmDurum.textContent = "Alarm çaldı.";
+        }
+      }, 1000);
+    };
+
+    document.getElementById("alarmIptal").onclick = () => {
+      clearInterval(alarmKontrol);
+      alarmDurum.textContent = "Alarm iptal edildi.";
+    };
+
+    /* ==================  TEMA DEĞİŞTİRİCİ ================== */
+    document.getElementById("temaSec").onchange = e => {
+      document.body.className = e.target.value;
+    };
+  </script>
+</body>
+</html>
+
