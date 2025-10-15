@@ -5,128 +5,179 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>ZAMAN MERKEZİ ⏰</title>
 
-  <!-- ✅ Google AdSense doğrulama kodu -->
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3214692314578267"
-     crossorigin="anonymous"></script>
-
   <style>
+    /* ======== GENEL TASARIM ======== */
     body {
-      font-family: Arial, sans-serif;
-      color: #fff;
+      font-family: 'Segoe UI', sans-serif;
       text-align: center;
-      background: url('https://cdn.pixabay.com/photo/2015/03/26/10/01/space-690157_1280.jpg') no-repeat center center/cover;
       margin: 0;
-      padding: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: center;
+      color: white;
+      transition: background 0.5s ease, color 0.5s ease;
+      background-size: cover;
+      background-position: center;
     }
 
     h1 {
-      font-size: 2.5rem;
-      margin-top: 30px;
-      text-shadow: 0 0 10px #000;
+      margin-top: 20px;
+      text-shadow: 2px 2px 5px black;
     }
 
-    .container {
-      background: rgba(0, 0, 0, 0.5);
-      margin: 40px auto;
+    .panel {
+      background-color: rgba(0, 0, 0, 0.5);
+      border-radius: 12px;
       padding: 20px;
-      border-radius: 20px;
+      margin: 15px;
       width: 90%;
-      max-width: 600px;
+      max-width: 400px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.4);
     }
 
+    button, select {
+      margin: 5px;
+      padding: 10px 15px;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    /* ======== TEMALAR ======== */
+    body.tema-acik { background: #f0f0f0; color: #222; }
+    body.tema-koyu { background: #121212; color: #eee; }
+    body.tema-mavi { background: linear-gradient(135deg, #2196f3, #0d47a1); }
+    body.tema-yesil { background: linear-gradient(135deg, #4caf50, #1b5e20); }
+    body.tema-mor { background: linear-gradient(135deg, #9c27b0, #4a148c); }
+    body.tema-doga { background-image: url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1470&q=80'); }
+    body.tema-gece { background-image: url('https://images.unsplash.com/photo-1444703686981-a3abbc4d4fe3?auto=format&fit=crop&w=1470&q=80'); }
+
+    #saat, #kronometre {
+      font-size: 2.5em;
+      font-weight: bold;
+      margin: 10px 0;
+      text-shadow: 2px 2px 4px black;
+    }
+
+    /* ======== REKLAM ALANLARI ======== */
     .reklam {
-      background: rgba(255, 255, 255, 0.1);
-      border-radius: 10px;
-      padding: 10px;
-      width: 200px;
-      height: 250px;
+      position: fixed;
+      background: rgba(255,255,255,0.1);
+      border: 1px dashed #aaa;
+      color: #ccc;
+      width: 160px;
+      height: 600px;
       display: flex;
       justify-content: center;
       align-items: center;
-      color: #ddd;
       font-size: 14px;
-      border: 1px dashed #aaa;
-      position: absolute;
-      top: 150px;
+      border-radius: 8px;
     }
 
-    .reklam.sol { left: 10px; }
-    .reklam.sag { right: 10px; }
+    .reklam.sol { left: 10px; top: 120px; }
+    .reklam.sag { right: 10px; top: 120px; }
+    .reklam.ust { top: 0; left: 50%; transform: translateX(-50%); width: 728px; height: 90px; }
 
-    .saat {
-      font-size: 3rem;
-      margin-top: 20px;
-    }
-
-    .kronometre {
-      font-size: 2.5rem;
-      margin-top: 20px;
-    }
-
-    button {
-      margin: 10px;
-      padding: 10px 20px;
-      border: none;
-      background: #fff;
-      color: #000;
-      border-radius: 10px;
-      cursor: pointer;
-      font-weight: bold;
+    @media (max-width: 768px) {
+      .reklam { display: none; }
     }
   </style>
 </head>
-<body>
+
+<body class="tema-gece">
   <h1>🕒 ZAMAN MERKEZİ</h1>
 
-  <div class="reklam sol">🔸 Reklam Alanı 1</div>
-  <div class="reklam sag">🔹 Reklam Alanı 2</div>
+  <!-- ÜST REKLAM ALANI -->
+  <div class="reklam ust">
+    <!-- Buraya AdSense kodunu yapıştır -->
+    Üst Reklam Alanı
+  </div>
 
-  <div class="container">
-    <h2>🕐 Saat ve Tarih</h2>
-    <div id="clock" class="saat"></div>
-    <p id="date"></p>
+  <!-- SOL REKLAM ALANI -->
+  <div class="reklam sol">
+    <!-- Buraya AdSense kodunu yapıştır -->
+    Sol Reklam Alanı
+  </div>
+
+  <!-- SAĞ REKLAM ALANI -->
+  <div class="reklam sag">
+    <!-- Buraya AdSense kodunu yapıştır -->
+    Sağ Reklam Alanı
+  </div>
+
+  <!-- ======== ANA İÇERİK ======== -->
+  <div class="panel">
+    <h3>🎨 Tema Seç</h3>
+    <select id="temaSec">
+      <option value="tema-gece">Gece 🌌</option>
+      <option value="tema-doga">Doğa 🌿</option>
+      <option value="tema-acik">Açık ☀️</option>
+      <option value="tema-koyu">Koyu 🌑</option>
+      <option value="tema-mavi">Mavi 💙</option>
+      <option value="tema-yesil">Yeşil 💚</option>
+      <option value="tema-mor">Mor 💜</option>
+    </select>
+  </div>
+
+  <div class="panel">
+    <h2>🕐 Saat</h2>
+    <div id="saat"></div>
 
     <h2>⏱ Kronometre</h2>
-    <div id="chrono" class="kronometre">00:00:00</div>
-    <button id="start">Başlat</button>
-    <button id="stop">Durdur</button>
-    <button id="reset">Sıfırla</button>
+    <div id="kronometre">00:00:00</div>
+    <button id="kronBaslat">Başlat</button>
+    <button id="kronDurdur">Durdur</button>
+    <button id="kronSifirla">Sıfırla</button>
   </div>
 
   <script>
-    // 🔸 Gerçek zamanlı saat
-    function updateClock() {
-      const now = new Date();
-      const time = now.toLocaleTimeString('tr-TR');
-      const date = now.toLocaleDateString('tr-TR', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
-      document.getElementById('clock').textContent = time;
-      document.getElementById('date').textContent = date;
+    /* SAAT GÜNCELLEME */
+    function guncelSaatiGoster() {
+      const simdi = new Date();
+      document.getElementById("saat").textContent = simdi.toLocaleTimeString("tr-TR");
     }
-    setInterval(updateClock, 1000);
-    updateClock();
+    setInterval(guncelSaatiGoster, 1000);
+    guncelSaatiGoster();
 
-    // 🔹 Kronometre
-    let startTime, elapsed = 0, timer;
-    const chrono = document.getElementById('chrono');
+    /* KRONOMETRE */
+    let kronSaniye = 0, kronAktif = false, kronInterval;
+    const kronEl = document.getElementById("kronometre");
 
-    document.getElementById('start').onclick = () => {
-      if (!timer) startTime = Date.now() - elapsed;
-      timer = setInterval(() => {
-        elapsed = Date.now() - startTime;
-        const h = Math.floor(elapsed / 3600000);
-        const m = Math.floor((elapsed % 3600000) / 60000);
-        const s = Math.floor((elapsed % 60000) / 1000);
-        chrono.textContent = 
-          `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+    function kronGuncelle() {
+      let s = kronSaniye % 60;
+      let d = Math.floor((kronSaniye / 60) % 60);
+      let sa = Math.floor(kronSaniye / 3600);
+      kronEl.textContent = 
+        `${String(sa).padStart(2, '0')}:${String(d).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+    }
+
+    document.getElementById("kronBaslat").onclick = () => {
+      if (kronAktif) return;
+      kronAktif = true;
+      kronInterval = setInterval(() => {
+        kronSaniye++;
+        kronGuncelle();
       }, 1000);
     };
 
-    document.getElementById('stop').onclick = () => { clearInterval(timer); timer = null; };
-    document.getElementById('reset').onclick = () => {
-      clearInterval(timer);
-      timer = null;
-      elapsed = 0;
-      chrono.textContent = '00:00:00';
+    document.getElementById("kronDurdur").onclick = () => {
+      clearInterval(kronInterval);
+      kronAktif = false;
+    };
+
+    document.getElementById("kronSifirla").onclick = () => {
+      clearInterval(kronInterval);
+      kronAktif = false;
+      kronSaniye = 0;
+      kronGuncelle();
+    };
+
+    /* TEMA DEĞİŞTİRME */
+    document.getElementById("temaSec").onchange = e => {
+      document.body.className = e.target.value;
     };
   </script>
 </body>
