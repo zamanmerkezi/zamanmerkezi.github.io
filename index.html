@@ -5,180 +5,142 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>ZAMAN MERKEZİ ⏰</title>
 
+  <!-- Google AdSense Kodu -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3214692314578267"
+          crossorigin="anonymous"></script>
+
   <style>
-    /* ======== GENEL TASARIM ======== */
     body {
-      font-family: 'Segoe UI', sans-serif;
+      font-family: Arial, sans-serif;
+      background: url('https://i.imgur.com/7pK2c5P.jpeg') no-repeat center center fixed;
+      background-size: cover;
+      color: white;
       text-align: center;
       margin: 0;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-start;
-      align-items: center;
-      color: white;
-      transition: background 0.5s ease, color 0.5s ease;
-      background-size: cover;
-      background-position: center;
+      padding: 0;
     }
 
     h1 {
-      margin-top: 20px;
-      text-shadow: 2px 2px 5px black;
+      margin-top: 30px;
+      font-size: 2em;
+      letter-spacing: 2px;
     }
 
-    .panel {
-      background-color: rgba(0, 0, 0, 0.5);
-      border-radius: 12px;
-      padding: 20px;
-      margin: 15px;
-      width: 90%;
-      max-width: 400px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.4);
-    }
-
-    button, select {
-      margin: 5px;
-      padding: 10px 15px;
-      border: none;
-      border-radius: 8px;
-      font-size: 16px;
-      cursor: pointer;
-    }
-
-    /* ======== TEMALAR ======== */
-    body.tema-acik { background: #f0f0f0; color: #222; }
-    body.tema-koyu { background: #121212; color: #eee; }
-    body.tema-mavi { background: linear-gradient(135deg, #2196f3, #0d47a1); }
-    body.tema-yesil { background: linear-gradient(135deg, #4caf50, #1b5e20); }
-    body.tema-mor { background: linear-gradient(135deg, #9c27b0, #4a148c); }
-    body.tema-doga { background-image: url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1470&q=80'); }
-    body.tema-gece { background-image: url('https://images.unsplash.com/photo-1444703686981-a3abbc4d4fe3?auto=format&fit=crop&w=1470&q=80'); }
-
-    #saat, #kronometre {
-      font-size: 2.5em;
-      font-weight: bold;
-      margin: 10px 0;
-      text-shadow: 2px 2px 4px black;
-    }
-
-    /* ======== REKLAM ALANLARI ======== */
     .reklam {
+      width: 180px;
+      background: rgba(0,0,0,0.4);
+      padding: 10px;
+      border-radius: 10px;
       position: fixed;
-      background: rgba(255,255,255,0.1);
-      border: 1px dashed #aaa;
-      color: #ccc;
-      width: 160px;
-      height: 600px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-size: 14px;
-      border-radius: 8px;
+      top: 100px;
     }
 
-    .reklam.sol { left: 10px; top: 120px; }
-    .reklam.sag { right: 10px; top: 120px; }
-    .reklam.ust { top: 0; left: 50%; transform: translateX(-50%); width: 728px; height: 90px; }
+    .reklam.sol {
+      left: 20px;
+    }
 
-    @media (max-width: 768px) {
-      .reklam { display: none; }
+    .reklam.sag {
+      right: 20px;
+    }
+
+    .icerik {
+      margin-top: 120px;
+    }
+
+    .kutu {
+      background: rgba(0,0,0,0.5);
+      padding: 20px;
+      border-radius: 15px;
+      display: inline-block;
+      margin: 10px;
+    }
+
+    select, button {
+      padding: 8px 12px;
+      border-radius: 8px;
+      border: none;
+      margin-top: 10px;
     }
   </style>
 </head>
+<body>
+  <h1>🕒 ZAMAN MERKEZİ 🕒</h1>
 
-<body class="tema-gece">
-  <h1>🕒 ZAMAN MERKEZİ</h1>
-
-  <!-- ÜST REKLAM ALANI -->
-  <div class="reklam ust">
-    <!-- Buraya AdSense kodunu yapıştır -->
-    Üst Reklam Alanı
-  </div>
-
-  <!-- SOL REKLAM ALANI -->
+  <!-- Sol reklam alanı -->
   <div class="reklam sol">
-    <!-- Buraya AdSense kodunu yapıştır -->
-    Sol Reklam Alanı
+    <b>Reklam Alanı 1</b>
+    <p>Buraya reklam veya görsel kodu ekleyebilirsin.</p>
   </div>
 
-  <!-- SAĞ REKLAM ALANI -->
+  <!-- Sağ reklam alanı -->
   <div class="reklam sag">
-    <!-- Buraya AdSense kodunu yapıştır -->
-    Sağ Reklam Alanı
+    <b>Reklam Alanı 2</b>
+    <p>Buraya reklam veya banner yerleştirilebilir.</p>
   </div>
 
-  <!-- ======== ANA İÇERİK ======== -->
-  <div class="panel">
-    <h3>🎨 Tema Seç</h3>
-    <select id="temaSec">
-      <option value="tema-gece">Gece 🌌</option>
-      <option value="tema-doga">Doğa 🌿</option>
-      <option value="tema-acik">Açık ☀️</option>
-      <option value="tema-koyu">Koyu 🌑</option>
-      <option value="tema-mavi">Mavi 💙</option>
-      <option value="tema-yesil">Yeşil 💚</option>
-      <option value="tema-mor">Mor 💜</option>
-    </select>
-  </div>
+  <div class="icerik">
+    <div class="kutu">
+      <h2>🪐 Tema Seç</h2>
+      <select id="tema">
+        <option>Gece Gökyüzü 🌌</option>
+        <option>Gündüz ☀️</option>
+        <option>Bulutlu ⛅</option>
+      </select>
+    </div>
 
-  <div class="panel">
-    <h2>🕐 Saat</h2>
-    <div id="saat"></div>
+    <div class="kutu">
+      <h2>⏰ Saat ve Tarih</h2>
+      <div id="saat">00:00:00</div>
+      <div id="tarih"></div>
+    </div>
 
-    <h2>⏱ Kronometre</h2>
-    <div id="kronometre">00:00:00</div>
-    <button id="kronBaslat">Başlat</button>
-    <button id="kronDurdur">Durdur</button>
-    <button id="kronSifirla">Sıfırla</button>
+    <div class="kutu">
+      <h2>⏱️ Kronometre</h2>
+      <div id="kronometre">00:00</div>
+      <button onclick="baslat()">Başlat</button>
+      <button onclick="durdur()">Durdur</button>
+      <button onclick="sifirla()">Sıfırla</button>
+    </div>
   </div>
 
   <script>
-    /* SAAT GÜNCELLEME */
-    function guncelSaatiGoster() {
+    // SAAT ve TARİH
+    function saatGuncelle() {
       const simdi = new Date();
-      document.getElementById("saat").textContent = simdi.toLocaleTimeString("tr-TR");
+      document.getElementById('saat').textContent = simdi.toLocaleTimeString('tr-TR');
+      document.getElementById('tarih').textContent = simdi.toLocaleDateString('tr-TR', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
     }
-    setInterval(guncelSaatiGoster, 1000);
-    guncelSaatiGoster();
+    setInterval(saatGuncelle, 1000);
+    saatGuncelle();
 
-    /* KRONOMETRE */
-    let kronSaniye = 0, kronAktif = false, kronInterval;
-    const kronEl = document.getElementById("kronometre");
+    // KRONOMETRE
+    let kronometreSaniye = 0;
+    let kronometreCalisiyor = false;
+    let kronometreInterval;
 
-    function kronGuncelle() {
-      let s = kronSaniye % 60;
-      let d = Math.floor((kronSaniye / 60) % 60);
-      let sa = Math.floor(kronSaniye / 3600);
-      kronEl.textContent = 
-        `${String(sa).padStart(2, '0')}:${String(d).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+    function baslat() {
+      if (!kronometreCalisiyor) {
+        kronometreCalisiyor = true;
+        kronometreInterval = setInterval(() => {
+          kronometreSaniye++;
+          const dakika = Math.floor(kronometreSaniye / 60);
+          const saniye = kronometreSaniye % 60;
+          document.getElementById('kronometre').textContent =
+            `${dakika.toString().padStart(2, '0')}:${saniye.toString().padStart(2, '0')}`;
+        }, 1000);
+      }
     }
 
-    document.getElementById("kronBaslat").onclick = () => {
-      if (kronAktif) return;
-      kronAktif = true;
-      kronInterval = setInterval(() => {
-        kronSaniye++;
-        kronGuncelle();
-      }, 1000);
-    };
+    function durdur() {
+      kronometreCalisiyor = false;
+      clearInterval(kronometreInterval);
+    }
 
-    document.getElementById("kronDurdur").onclick = () => {
-      clearInterval(kronInterval);
-      kronAktif = false;
-    };
-
-    document.getElementById("kronSifirla").onclick = () => {
-      clearInterval(kronInterval);
-      kronAktif = false;
-      kronSaniye = 0;
-      kronGuncelle();
-    };
-
-    /* TEMA DEĞİŞTİRME */
-    document.getElementById("temaSec").onchange = e => {
-      document.body.className = e.target.value;
-    };
+    function sifirla() {
+      durdur();
+      kronometreSaniye = 0;
+      document.getElementById('kronometre').textContent = '00:00';
+    }
   </script>
 </body>
 </html>
