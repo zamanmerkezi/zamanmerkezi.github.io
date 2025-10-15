@@ -5,15 +5,22 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>ZAMAN MERKEZİ ⏰</title>
 
-  <!-- Google AdSense Kodu -->
+  <!-- ✅ Google AdSense Otomatik Reklam Kodu -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3214692314578267"
           crossorigin="anonymous"></script>
+
+  <!-- ✅ Otomatik reklamları etkinleştir -->
+  <script>
+    (adsbygoogle = window.adsbygoogle || []).push({
+      google_ad_client: "ca-pub-3214692314578267",
+      enable_page_level_ads: true
+    });
+  </script>
 
   <style>
     body {
       font-family: Arial, sans-serif;
-      background: url('https://i.imgur.com/7pK2c5P.jpeg') no-repeat center center fixed;
-      background-size: cover;
+      background: url('https://cdn.pixabay.com/photo/2017/09/13/08/53/space-2742113_1280.jpg') no-repeat center center/cover;
       color: white;
       text-align: center;
       margin: 0;
@@ -21,126 +28,127 @@
     }
 
     h1 {
-      margin-top: 30px;
-      font-size: 2em;
-      letter-spacing: 2px;
+      margin-top: 40px;
+      font-size: 2.2em;
+      font-weight: bold;
     }
 
-    .reklam {
+    .container {
+      margin-top: 20px;
+    }
+
+    .clock, .stopwatch {
+      background: rgba(0, 0, 0, 0.5);
+      border-radius: 12px;
+      padding: 20px;
+      margin: 15px auto;
+      width: 300px;
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+    }
+
+    .ads {
+      position: absolute;
+      top: 100px;
       width: 180px;
-      background: rgba(0,0,0,0.4);
+      background: rgba(0, 0, 0, 0.4);
       padding: 10px;
       border-radius: 10px;
-      position: fixed;
-      top: 100px;
+      font-size: 14px;
+      line-height: 1.4;
     }
 
-    .reklam.sol {
-      left: 20px;
-    }
+    .left { left: 20px; }
+    .right { right: 20px; }
 
-    .reklam.sag {
-      right: 20px;
-    }
-
-    .icerik {
-      margin-top: 120px;
-    }
-
-    .kutu {
-      background: rgba(0,0,0,0.5);
-      padding: 20px;
-      border-radius: 15px;
-      display: inline-block;
-      margin: 10px;
-    }
-
-    select, button {
-      padding: 8px 12px;
-      border-radius: 8px;
+    button {
+      padding: 8px 15px;
+      margin: 5px;
       border: none;
-      margin-top: 10px;
+      border-radius: 5px;
+      cursor: pointer;
+      background: #444;
+      color: white;
     }
+
+    button:hover { background: #666; }
+
   </style>
 </head>
 <body>
-  <h1>🕒 ZAMAN MERKEZİ 🕒</h1>
+  <h1>🕒 ZAMAN MERKEZİ</h1>
 
-  <!-- Sol reklam alanı -->
-  <div class="reklam sol">
-    <b>Reklam Alanı 1</b>
-    <p>Buraya reklam veya görsel kodu ekleyebilirsin.</p>
+  <!-- ✅ Manuel Reklam Alanları -->
+  <div class="ads left">
+    <strong>Reklam Alanı 1</strong>
+    <br>
+    <!-- Buraya reklam kodu veya banner ekleyebilirsin -->
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-3214692314578267"
+         data-ad-slot="1234567890"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
   </div>
 
-  <!-- Sağ reklam alanı -->
-  <div class="reklam sag">
-    <b>Reklam Alanı 2</b>
-    <p>Buraya reklam veya banner yerleştirilebilir.</p>
+  <div class="ads right">
+    <strong>Reklam Alanı 2</strong>
+    <br>
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-3214692314578267"
+         data-ad-slot="0987654321"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
   </div>
 
-  <div class="icerik">
-    <div class="kutu">
-      <h2>🪐 Tema Seç</h2>
-      <select id="tema">
-        <option>Gece Gökyüzü 🌌</option>
-        <option>Gündüz ☀️</option>
-        <option>Bulutlu ⛅</option>
-      </select>
+  <!-- Saat ve Tarih -->
+  <div class="container">
+    <div class="clock">
+      <h2>🕓 Saat ve Tarih</h2>
+      <h1 id="clock">00:00:00</h1>
+      <p id="date"></p>
     </div>
 
-    <div class="kutu">
-      <h2>⏰ Saat ve Tarih</h2>
-      <div id="saat">00:00:00</div>
-      <div id="tarih"></div>
-    </div>
-
-    <div class="kutu">
-      <h2>⏱️ Kronometre</h2>
-      <div id="kronometre">00:00</div>
-      <button onclick="baslat()">Başlat</button>
-      <button onclick="durdur()">Durdur</button>
-      <button onclick="sifirla()">Sıfırla</button>
+    <!-- Kronometre -->
+    <div class="stopwatch">
+      <h2>⏱ Kronometre</h2>
+      <h1 id="timer">00:00</h1>
+      <button onclick="start()">Başlat</button>
+      <button onclick="stop()">Durdur</button>
+      <button onclick="reset()">Sıfırla</button>
     </div>
   </div>
 
   <script>
-    // SAAT ve TARİH
-    function saatGuncelle() {
-      const simdi = new Date();
-      document.getElementById('saat').textContent = simdi.toLocaleTimeString('tr-TR');
-      document.getElementById('tarih').textContent = simdi.toLocaleDateString('tr-TR', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+    // Saat ve tarih
+    function updateClock() {
+      const now = new Date();
+      const clock = document.getElementById("clock");
+      const date = document.getElementById("date");
+      clock.textContent = now.toLocaleTimeString("tr-TR");
+      date.textContent = now.toLocaleDateString("tr-TR", { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
     }
-    setInterval(saatGuncelle, 1000);
-    saatGuncelle();
+    setInterval(updateClock, 1000);
+    updateClock();
 
-    // KRONOMETRE
-    let kronometreSaniye = 0;
-    let kronometreCalisiyor = false;
-    let kronometreInterval;
-
-    function baslat() {
-      if (!kronometreCalisiyor) {
-        kronometreCalisiyor = true;
-        kronometreInterval = setInterval(() => {
-          kronometreSaniye++;
-          const dakika = Math.floor(kronometreSaniye / 60);
-          const saniye = kronometreSaniye % 60;
-          document.getElementById('kronometre').textContent =
-            `${dakika.toString().padStart(2, '0')}:${saniye.toString().padStart(2, '0')}`;
+    // Kronometre
+    let timer;
+    let seconds = 0;
+    function start() {
+      if (!timer) {
+        timer = setInterval(() => {
+          seconds++;
+          const min = Math.floor(seconds / 60);
+          const sec = seconds % 60;
+          document.getElementById("timer").textContent =
+            `${min.toString().padStart(2, '0')}:${sec.toString().padStart(2, '0')}`;
         }, 1000);
       }
     }
-
-    function durdur() {
-      kronometreCalisiyor = false;
-      clearInterval(kronometreInterval);
-    }
-
-    function sifirla() {
-      durdur();
-      kronometreSaniye = 0;
-      document.getElementById('kronometre').textContent = '00:00';
-    }
+    function stop() { clearInterval(timer); timer = null; }
+    function reset() { stop(); seconds = 0; document.getElementById("timer").textContent = "00:00"; }
   </script>
 </body>
 </html>
