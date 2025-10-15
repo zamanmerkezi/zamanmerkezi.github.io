@@ -5,153 +5,129 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>ZAMAN MERKEZİ ⏰</title>
 
-  <!-- Google AdSense Ana Kodu -->
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3214692314578267" crossorigin="anonymous"></script>
+  <!-- ✅ Google AdSense doğrulama kodu -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3214692314578267"
+     crossorigin="anonymous"></script>
 
   <style>
     body {
       font-family: Arial, sans-serif;
-      background: #f9f9f9;
+      color: #fff;
+      text-align: center;
+      background: url('https://cdn.pixabay.com/photo/2015/03/26/10/01/space-690157_1280.jpg') no-repeat center center/cover;
       margin: 0;
       padding: 0;
-      text-align: center;
     }
 
-    header {
-      background-color: #2c3e50;
-      color: white;
-      padding: 15px 0;
-      font-size: 24px;
-      font-weight: bold;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-    }
-
-    main {
-      margin: 30px auto;
-      max-width: 600px;
-      background: white;
-      padding: 20px;
-      border-radius: 15px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    }
-
-    .reklam-alani {
-      margin: 20px 0;
-      text-align: center;
-    }
-
-    .yan-reklam {
-      position: fixed;
-      right: 10px;
-      top: 100px;
-      width: 160px;
-      height: 600px;
-      background: #fff;
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.2);
-      padding: 5px;
-      display: none;
-    }
-
-    @media (min-width: 900px) {
-      .yan-reklam {
-        display: block;
-      }
-    }
-
-    footer {
-      background-color: #2c3e50;
-      color: white;
-      padding: 10px 0;
+    h1 {
+      font-size: 2.5rem;
       margin-top: 30px;
-      font-size: 14px;
+      text-shadow: 0 0 10px #000;
     }
 
-    #clock {
-      font-size: 40px;
-      margin: 15px 0;
-      color: #333;
+    .container {
+      background: rgba(0, 0, 0, 0.5);
+      margin: 40px auto;
+      padding: 20px;
+      border-radius: 20px;
+      width: 90%;
+      max-width: 600px;
+    }
+
+    .reklam {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      padding: 10px;
+      width: 200px;
+      height: 250px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #ddd;
+      font-size: 14px;
+      border: 1px dashed #aaa;
+      position: absolute;
+      top: 150px;
+    }
+
+    .reklam.sol { left: 10px; }
+    .reklam.sag { right: 10px; }
+
+    .saat {
+      font-size: 3rem;
+      margin-top: 20px;
+    }
+
+    .kronometre {
+      font-size: 2.5rem;
+      margin-top: 20px;
     }
 
     button {
-      padding: 10px 20px;
       margin: 10px;
+      padding: 10px 20px;
       border: none;
+      background: #fff;
+      color: #000;
       border-radius: 10px;
-      background: #3498db;
-      color: white;
       cursor: pointer;
-      font-size: 16px;
-    }
-
-    button:hover {
-      background: #2980b9;
+      font-weight: bold;
     }
   </style>
 </head>
-
 <body>
-  <header>ZAMAN MERKEZİ ⏰</header>
+  <h1>🕒 ZAMAN MERKEZİ</h1>
 
-  <!-- ÜST REKLAM -->
-  <div class="reklam-alani">
-    <ins class="adsbygoogle"
-         style="display:block"
-         data-ad-client="ca-pub-3214692314578267"
-         data-ad-slot="100000001"
-         data-ad-format="auto"
-         data-full-width-responsive="true"></ins>
-    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+  <div class="reklam sol">🔸 Reklam Alanı 1</div>
+  <div class="reklam sag">🔹 Reklam Alanı 2</div>
+
+  <div class="container">
+    <h2>🕐 Saat ve Tarih</h2>
+    <div id="clock" class="saat"></div>
+    <p id="date"></p>
+
+    <h2>⏱ Kronometre</h2>
+    <div id="chrono" class="kronometre">00:00:00</div>
+    <button id="start">Başlat</button>
+    <button id="stop">Durdur</button>
+    <button id="reset">Sıfırla</button>
   </div>
-
-  <main>
-    <h2>Canlı Saat</h2>
-    <div id="clock"></div>
-
-    <button onclick="startClock()">Başlat</button>
-    <button onclick="stopClock()">Durdur</button>
-  </main>
-
-  <!-- ALT REKLAM -->
-  <div class="reklam-alani">
-    <ins class="adsbygoogle"
-         style="display:block"
-         data-ad-client="ca-pub-3214692314578267"
-         data-ad-slot="100000002"
-         data-ad-format="auto"
-         data-full-width-responsive="true"></ins>
-    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
-  </div>
-
-  <!-- SAĞ YAN REKLAM -->
-  <div class="yan-reklam">
-    <ins class="adsbygoogle"
-         style="display:inline-block;width:160px;height:600px"
-         data-ad-client="ca-pub-3214692314578267"
-         data-ad-slot="100000003"></ins>
-    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
-  </div>
-
-  <footer>© 2025 ZAMAN MERKEZİ - Tüm Hakları Saklıdır.</footer>
 
   <script>
-    let interval;
+    // 🔸 Gerçek zamanlı saat
     function updateClock() {
       const now = new Date();
-      const h = String(now.getHours()).padStart(2, '0');
-      const m = String(now.getMinutes()).padStart(2, '0');
-      const s = String(now.getSeconds()).padStart(2, '0');
-      document.getElementById("clock").textContent = `${h}:${m}:${s}`;
+      const time = now.toLocaleTimeString('tr-TR');
+      const date = now.toLocaleDateString('tr-TR', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+      document.getElementById('clock').textContent = time;
+      document.getElementById('date').textContent = date;
     }
+    setInterval(updateClock, 1000);
+    updateClock();
 
-    function startClock() {
-      updateClock();
-      interval = setInterval(updateClock, 1000);
-    }
+    // 🔹 Kronometre
+    let startTime, elapsed = 0, timer;
+    const chrono = document.getElementById('chrono');
 
-    function stopClock() {
-      clearInterval(interval);
-    }
+    document.getElementById('start').onclick = () => {
+      if (!timer) startTime = Date.now() - elapsed;
+      timer = setInterval(() => {
+        elapsed = Date.now() - startTime;
+        const h = Math.floor(elapsed / 3600000);
+        const m = Math.floor((elapsed % 3600000) / 60000);
+        const s = Math.floor((elapsed % 60000) / 1000);
+        chrono.textContent = 
+          `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+      }, 1000);
+    };
+
+    document.getElementById('stop').onclick = () => { clearInterval(timer); timer = null; };
+    document.getElementById('reset').onclick = () => {
+      clearInterval(timer);
+      timer = null;
+      elapsed = 0;
+      chrono.textContent = '00:00:00';
+    };
   </script>
 </body>
 </html>
