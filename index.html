@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>ZAMAN MERKEZİ ⏰</title>
 
-  <!-- ✅ Google AdSense Otomatik Reklam Kodu -->
+  <!-- ✅ Google AdSense Otomatik Reklam Scripti -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3214692314578267"
           crossorigin="anonymous"></script>
 
@@ -46,28 +46,28 @@
       cursor: pointer;
       background: #444;
       color: white;
+      transition: 0.3s;
     }
 
-    button:hover { background: #666; }
-
+    button:hover {
+      background: #666;
+    }
   </style>
 </head>
 <body>
   <h1>🕒 ZAMAN MERKEZİ</h1>
 
-  <!-- ✅ Ana Sayfa Reklam -->
+  <!-- ✅ Üst Reklam Alanı -->
   <ins class="adsbygoogle"
        style="display:block; margin: 20px auto; text-align:center;"
        data-ad-client="ca-pub-3214692314578267"
        data-ad-slot="8753498736"
        data-ad-format="auto"
        data-full-width-responsive="true"></ins>
-  <script>
-       (adsbygoogle = window.adsbygoogle || []).push({});
-  </script>
+  <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
 
-  <!-- Saat ve Tarih -->
   <div class="container">
+    <!-- Saat ve Tarih -->
     <div class="clock">
       <h2>🕓 Saat ve Tarih</h2>
       <h1 id="clock">00:00:00</h1>
@@ -83,33 +83,28 @@
       <button onclick="reset()">Sıfırla</button>
     </div>
 
-    <!-- ✅ Sayfa Altı Reklam (İsteğe Bağlı) -->
+    <!-- ✅ Alt Reklam Alanı -->
     <ins class="adsbygoogle"
          style="display:block; margin: 20px auto; text-align:center;"
          data-ad-client="ca-pub-3214692314578267"
          data-ad-slot="8753498736"
          data-ad-format="auto"
          data-full-width-responsive="true"></ins>
-    <script>
-         (adsbygoogle = window.adsbygoogle || []).push({});
-    </script>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
   </div>
 
   <script>
     // Saat ve tarih
     function updateClock() {
       const now = new Date();
-      const clock = document.getElementById("clock");
-      const date = document.getElementById("date");
-      clock.textContent = now.toLocaleTimeString("tr-TR");
-      date.textContent = now.toLocaleDateString("tr-TR", { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+      document.getElementById("clock").textContent = now.toLocaleTimeString("tr-TR");
+      document.getElementById("date").textContent = now.toLocaleDateString("tr-TR", { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
     }
     setInterval(updateClock, 1000);
     updateClock();
 
     // Kronometre
-    let timer;
-    let seconds = 0;
+    let timer, seconds = 0;
     function start() {
       if (!timer) {
         timer = setInterval(() => {
