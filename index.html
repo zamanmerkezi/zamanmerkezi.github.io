@@ -1,163 +1,174 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
-  <title>ZAMAN MERKEZİ — Push Ready</title>
-  <meta name="theme-color" content="#00bfff" />
-  <link rel="manifest" href="manifest.json" />
-  <link rel="icon" href="icon-192.png" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#00bfff">
+  <title>ZAMAN MERKEZİ ⏰</title>
+
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="icon-192.png" sizes="192x192" type="image/png">
+  <link rel="apple-touch-icon" href="icon-512.png">
+
   <style>
-    body { font-family: "Segoe UI", sans-serif; background: linear-gradient(135deg,#0b1220,#09203f,#00bfff); color:#fff; margin:0; padding:18px; }
-    .card { background: rgba(255,255,255,0.06); padding:12px; border-radius:10px; margin-bottom:12px; max-width:720px; }
-    h1{margin-top:0}
-    input, textarea, select, button { width:100%; padding:10px; margin:6px 0; border-radius:8px; border:none; }
-    .row { display:flex; gap:8px; }
-    .col { flex:1; }
+    body {
+      font-family: "Segoe UI", sans-serif;
+      background: linear-gradient(135deg, #0b1220, #002f4b);
+      color: white;
+      margin: 0; padding: 0;
+      text-align: center;
+    }
+    h1 { margin-top: 20px; }
+    .section {
+      margin: 20px auto;
+      width: 90%;
+      max-width: 400px;
+      background: rgba(255,255,255,0.1);
+      padding: 15px;
+      border-radius: 16px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.3);
+    }
+    button {
+      background: #00bfff;
+      border: none;
+      color: white;
+      padding: 10px 15px;
+      border-radius: 8px;
+      cursor: pointer;
+      margin: 5px;
+    }
+    textarea {
+      width: 100%;
+      height: 100px;
+      border-radius: 8px;
+      padding: 10px;
+      border: none;
+      resize: none;
+      outline: none;
+      font-size: 14px;
+    }
   </style>
 </head>
 <body>
-  <h1>⏰ ZAMAN MERKEZİ (Push Ready)</h1>
+  <h1>⏰ ZAMAN MERKEZİ</h1>
 
-  <div class="card">
-    <h3>Canlı Saat</h3>
-    <div id="clock" style="font-size:1.6rem;font-weight:bold;">--:--:--</div>
+  <div class="section" id="clock">
+    <h2>🕒 Saat</h2>
+    <div id="time"></div>
   </div>
 
-  <div class="card">
-    <h3>Bildirim & Push</h3>
-    <button id="btnRequest">🔔 Bildirim İzni İste</button>
-    <button id="btnSubscribe">📡 Push Abone Ol</button>
-    <button id="btnSendTest">✉️ Tüm Abonelere Test Gönder</button>
-    <div id="pushStatus"></div>
+  <div class="section" id="chronometer">
+    <h2>⏱ Kronometre</h2>
+    <div id="chrono-display">00:00:00.000</div>
+    <button id="startChrono">Başlat</button>
+    <button id="stopChrono">Durdur</button>
+    <button id="resetChrono">Sıfırla</button>
   </div>
 
-  <div class="card">
-    <h3>Tekrarlayan Alarm Ekle</h3>
-    <div class="row">
-      <input id="repeatTime" type="time" class="col" />
-      <select id="repeatPattern" class="col">
-        <option value="daily">Her gün</option>
-        <option value="weekdays">Hafta içi</option>
-        <option value="weekly">Her hafta (aynı gün)</option>
-      </select>
-    </div>
-    <button id="addRepeat">➕ Ekle</button>
-    <div id="repeatList"></div>
+  <div class="section" id="countdown">
+    <h2>⏳ Geri Sayım</h2>
+    <input type="number" id="countMinutes" placeholder="Dakika" min="0">
+    <input type="number" id="countSeconds" placeholder="Saniye" min="0">
+    <div id="countDisplay">00:00</div>
+    <button id="startCount">Başlat</button>
+    <button id="stopCount">Durdur</button>
+    <button id="resetCount">Sıfırla</button>
   </div>
 
-  <div class="card">
-    <h3>Not Hatırlatıcı (yerel)</h3>
-    <textarea id="noteText" placeholder="Not..."></textarea>
-    <input id="noteDate" type="datetime-local" />
-    <button id="addNoteReminder">Hatırlatıcı Kur</button>
-    <div id="noteStatus"></div>
+  <div class="section" id="notes">
+    <h2>📝 Not Defteri</h2>
+    <textarea id="noteArea" placeholder="Notlarını buraya yaz..."></textarea>
+    <button id="saveNote">Kaydet</button>
   </div>
 
   <script>
-    // Saat
-    setInterval(()=> document.getElementById('clock').textContent = new Date().toLocaleTimeString('tr-TR'), 1000);
+    // ⏰ Gerçek saat
+    function updateClock() {
+      document.getElementById("time").textContent = new Date().toLocaleTimeString("tr-TR");
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
 
-    // Service Worker register
+    // ⏱ Kronometre
+    let chronoStartTime = 0, chronoInterval, chronoRunning = false;
+    const display = document.getElementById("chrono-display");
+    document.getElementById("startChrono").onclick = () => {
+      if (!chronoRunning) {
+        chronoStartTime = Date.now() - (chronoStartTime || 0);
+        chronoInterval = setInterval(() => {
+          const elapsed = Date.now() - chronoStartTime;
+          const ms = String(elapsed % 1000).padStart(3, "0");
+          const s = String(Math.floor(elapsed / 1000) % 60).padStart(2, "0");
+          const m = String(Math.floor(elapsed / 60000) % 60).padStart(2, "0");
+          const h = String(Math.floor(elapsed / 3600000)).padStart(2, "0");
+          display.textContent = `${h}:${m}:${s}.${ms}`;
+        }, 10);
+        chronoRunning = true;
+      }
+    };
+    document.getElementById("stopChrono").onclick = () => {
+      clearInterval(chronoInterval);
+      chronoRunning = false;
+    };
+    document.getElementById("resetChrono").onclick = () => {
+      clearInterval(chronoInterval);
+      chronoStartTime = 0;
+      display.textContent = "00:00:00.000";
+      chronoRunning = false;
+    };
+
+    // ⏳ Geri Sayım
+    let countdownInterval, remaining = 0;
+    const countDisplay = document.getElementById("countDisplay");
+    document.getElementById("startCount").onclick = () => {
+      const mins = +document.getElementById("countMinutes").value || 0;
+      const secs = +document.getElementById("countSeconds").value || 0;
+      remaining = mins * 60 + secs;
+      clearInterval(countdownInterval);
+      countdownInterval = setInterval(() => {
+        const m = String(Math.floor(remaining / 60)).padStart(2, "0");
+        const s = String(remaining % 60).padStart(2, "0");
+        countDisplay.textContent = `${m}:${s}`;
+        if (remaining-- <= 0) {
+          clearInterval(countdownInterval);
+          countDisplay.textContent = "00:00";
+          // Bildirim gönder
+          if (Notification.permission === "granted") {
+            navigator.serviceWorker.ready.then(reg => {
+              reg.showNotification("Geri Sayım Bitti! ⏰", {
+                body: "Süren doldu!",
+                icon: "icon-192.png"
+              });
+            });
+          }
+        }
+      }, 1000);
+    };
+    document.getElementById("stopCount").onclick = () => clearInterval(countdownInterval);
+    document.getElementById("resetCount").onclick = () => {
+      clearInterval(countdownInterval);
+      countDisplay.textContent = "00:00";
+    };
+
+    // 📝 Not Defteri
+    const noteArea = document.getElementById("noteArea");
+    noteArea.value = localStorage.getItem("note") || "";
+    document.getElementById("saveNote").onclick = () => {
+      localStorage.setItem("note", noteArea.value);
+      alert("Not kaydedildi ✅");
+    };
+
+    // 🔔 Bildirim izni
+    if ('Notification' in window && Notification.permission !== 'granted') {
+      Notification.requestPermission();
+    }
+
+    // ✅ Service Worker kaydı
     if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('/service-worker.js').then(() => {
-        console.log('Service Worker registered');
-      }).catch(e => console.error('SW register error', e));
+      navigator.serviceWorker.register('/push-sw.js')
+        .then(reg => console.log('Service Worker aktif:', reg.scope))
+        .catch(err => console.warn('SW hatası:', err));
     }
-
-    // Request notifications
-    document.getElementById('btnRequest').addEventListener('click', async () => {
-      const perm = await Notification.requestPermission();
-      document.getElementById('pushStatus').textContent = 'Permission: ' + perm;
-    });
-
-    // Get VAPID key from server and subscribe
-    async function getVapidKey() {
-      const res = await fetch('/vapidPublicKey');
-      const j = await res.json();
-      return j.publicKey;
-    }
-
-    function urlBase64ToUint8Array(base64String) {
-      const padding = '='.repeat((4 - base64String.length % 4) % 4);
-      const base64 = (base64String + padding).replace(/\-/g, '+').replace(/_/g, '/');
-      const rawData = atob(base64);
-      const outputArray = new Uint8Array(rawData.length);
-      for (let i = 0; i < rawData.length; ++i) outputArray[i] = rawData.charCodeAt(i);
-      return outputArray;
-    }
-
-    document.getElementById('btnSubscribe').addEventListener('click', async () => {
-      try {
-        const vapidKey = await getVapidKey();
-        const reg = await navigator.serviceWorker.ready;
-        const sub = await reg.pushManager.subscribe({
-          userVisibleOnly: true,
-          applicationServerKey: urlBase64ToUint8Array(vapidKey)
-        });
-        // gönder sunucuya
-        await fetch('/subscribe', { method: 'POST', body: JSON.stringify(sub), headers: { 'Content-Type': 'application/json' }});
-        document.getElementById('pushStatus').textContent = 'Abonelik gönderildi.';
-      } catch (e) {
-        document.getElementById('pushStatus').textContent = 'Abone olurken hata: ' + (e.message || e);
-      }
-    });
-
-    document.getElementById('btnSendTest').addEventListener('click', async () => {
-      const resp = await fetch('/sendTest', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({title:'Test', body:'Bu bir test bildirimi', url:'/'})});
-      const j = await resp.json();
-      alert('Gönderildi: ' + JSON.stringify(j));
-    });
-
-    // Repeat alarms (local storage + server schedule optional)
-    function loadRepeats() {
-      const arr = JSON.parse(localStorage.getItem('repeatAlarms') || '[]');
-      const el = document.getElementById('repeatList');
-      el.innerHTML = arr.map((r,i)=> `<div>${r.time} — ${r.pattern} <button data-i="${i}" class="del">Sil</button></div>`).join('');
-    }
-    loadRepeats();
-    document.getElementById('addRepeat').addEventListener('click', () => {
-      const t = document.getElementById('repeatTime').value;
-      const p = document.getElementById('repeatPattern').value;
-      if (!t) return alert('Saat gir');
-      const arr = JSON.parse(localStorage.getItem('repeatAlarms')||'[]'); arr.push({time:t, pattern:p}); localStorage.setItem('repeatAlarms', JSON.stringify(arr)); loadRepeats();
-    });
-    document.getElementById('repeatList').addEventListener('click', e => {
-      if (e.target.classList.contains('del')) {
-        const i = +e.target.dataset.i;
-        const arr = JSON.parse(localStorage.getItem('repeatAlarms')||'[]'); arr.splice(i,1); localStorage.setItem('repeatAlarms', JSON.stringify(arr)); loadRepeats();
-      }
-    });
-
-    // local check repeats every minute
-    setInterval(() => {
-      const arr = JSON.parse(localStorage.getItem('repeatAlarms')||'[]');
-      const now = new Date(); const cur = now.toTimeString().slice(0,5);
-      arr.forEach(r => { if (r.time === cur) triggerLocal('Tekrarlayan alarm: ' + r.time); });
-    }, 60*1000);
-
-    function triggerLocal(text) {
-      if (Notification.permission === 'granted') {
-        navigator.serviceWorker.getRegistration().then(reg => {
-          if (reg) reg.showNotification('⏰ Zaman Merkezi', { body: text, icon: '/icon-192.png', vibrate:[200,100,200]});
-          else new Notification('⏰ Zaman Merkezi', { body: text });
-        });
-      } else {
-        alert(text);
-      }
-    }
-
-    // Note reminder (local)
-    document.getElementById('addNoteReminder').addEventListener('click', () => {
-      const txt = document.getElementById('noteText').value;
-      const dt = document.getElementById('noteDate').value;
-      if (!txt || !dt) return alert('Not ve tarih gir');
-      const diff = new Date(dt) - new Date();
-      if (diff <= 0) return alert('Gelecek tarih seç');
-      setTimeout(()=> triggerLocal('Not hatırlatma: ' + txt), diff);
-      document.getElementById('noteStatus').textContent = 'Hatırlatıcı kuruldu.';
-    });
-
   </script>
 </body>
 </html>
