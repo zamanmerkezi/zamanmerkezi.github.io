@@ -1,12 +1,10 @@
 {
-  "name": "ZAMAN MERKEZİ ⏰",
+  "name": "ZAMAN MERKEZİ",
   "short_name": "ZAMAN",
-  "description": "Saat, kronometre, geri sayım, alarm, not defteri ve hava durumu — hepsi bir arada!",
-  "start_url": "index.html",
+  "start_url": "/",
   "display": "standalone",
   "background_color": "#0b1220",
   "theme_color": "#00bfff",
-  "orientation": "portrait",
   "icons": [
     {
       "src": "icon-192.png",
