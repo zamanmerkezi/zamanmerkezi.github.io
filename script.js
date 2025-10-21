@@ -1,125 +1,88 @@
-// ============================
-// 🕒 SAAT ve TARİH
-// ============================
+// Saat
 function updateClock() {
   const now = new Date();
   document.getElementById("clock").textContent = now.toLocaleTimeString("tr-TR");
   document.getElementById("date").textContent = now.toLocaleDateString("tr-TR", {
-    weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
+    weekday: "long", year: "numeric", month: "long", day: "numeric"
   });
 }
 setInterval(updateClock, 1000);
 updateClock();
 
-// ============================
-// 🌍 DÜNYA SAATLERİ
-// ============================
-const cities = [
-  { name: "İstanbul", tz: "Europe/Istanbul" },
-  { name: "Londra", tz: "Europe/London" },
-  { name: "Tokyo", tz: "Asia/Tokyo" },
-  { name: "New York", tz: "America/New_York" },
-  { name: "Sydney", tz: "Australia/Sydney" }
-];
-
+// Dünya Saatleri
+const cities = { "İstanbul": 3, "Londra": 0, "New York": -4, "Tokyo": 9 };
 function updateWorldTimes() {
   const container = document.getElementById("worldTimes");
   container.innerHTML = "";
-  cities.forEach(city => {
-    const now = new Date().toLocaleTimeString("tr-TR", { timeZone: city.tz });
+  const now = new Date();
+  for (const [city, offset] of Object.entries(cities)) {
+    const utc = now.getTime() + now.getTimezoneOffset() * 60000;
+    const local = new Date(utc + 3600000 * offset);
     const div = document.createElement("div");
-    div.textContent = `${city.name}: ${now}`;
+    div.textContent = `${city}: ${local.toLocaleTimeString("tr-TR")}`;
     container.appendChild(div);
-  });
+  }
 }
 setInterval(updateWorldTimes, 1000);
 updateWorldTimes();
 
-// ============================
-// ⏱ KRONOMETRE
-// ============================
-let timer, seconds = 0;
+// Kronometre
+let timerInterval, seconds = 0, running = false;
 function start() {
-  if (!timer) {
-    timer = setInterval(() => {
+  if (!running) {
+    running = true;
+    timerInterval = setInterval(() => {
       seconds++;
-      const min = Math.floor(seconds / 60);
-      const sec = seconds % 60;
-      document.getElementById("timer").textContent =
-        `${min.toString().padStart(2, '0')}:${sec.toString().padStart(2, '0')}`;
+      const min = String(Math.floor(seconds / 60)).padStart(2, "0");
+      const sec = String(seconds % 60).padStart(2, "0");
+      document.getElementById("timer").textContent = `${min}:${sec}`;
     }, 1000);
   }
 }
-function stop() { clearInterval(timer); timer = null; }
-function reset() { stop(); seconds = 0; document.getElementById("timer").textContent = "00:00"; }
+function stop() { running = false; clearInterval(timerInterval); }
+function reset() {
+  running = false;
+  clearInterval(timerInterval);
+  seconds = 0;
+  document.getElementById("timer").textContent = "00:00";
+}
 
-// ============================
-// ⏳ GERİ SAYIM
-// ============================
-let countdown;
+// Geri Sayım
+let countdownInterval;
 function startCountdown() {
-  clearInterval(countdown);
-  let timeLeft = parseInt(document.getElementById("countdownInput").value);
+  let time = parseInt(document.getElementById("countdownInput").value);
   const display = document.getElementById("countdownDisplay");
-  if (isNaN(timeLeft) || timeLeft <= 0) return alert("Geçerli bir süre gir!");
-
-  countdown = setInterval(() => {
-    display.textContent = timeLeft;
-    if (timeLeft <= 0) {
-      clearInterval(countdown);
-      display.textContent = "Bitti!";
-      showNotification("Geri Sayım Tamamlandı ⏳");
-    }
-    timeLeft--;
+  clearInterval(countdownInterval);
+  countdownInterval = setInterval(() => {
+    display.textContent = time;
+    if (time <= 0) { clearInterval(countdownInterval); alert("⏰ Süre doldu!"); }
+    time--;
   }, 1000);
 }
 
-// ============================
-// 🔔 ALARM
-// ============================
+// Alarm
 let alarmTime = null;
 function setAlarm() {
-  alarmTime = document.getElementById("alarmTime").value;
-  document.getElementById("alarmStatus").textContent = `Alarm kuruldu: ${alarmTime}`;
+  const input = document.getElementById("alarmTime").value;
+  if (!input) return alert("Lütfen bir saat seçin!");
+  alarmTime = input;
+  document.getElementById("alarmStatus").textContent = `Alarm kuruldu: ${input}`;
 }
-
 setInterval(() => {
-  if (alarmTime) {
-    const now = new Date();
-    const currentTime = now.toTimeString().slice(0, 5);
-    if (currentTime === alarmTime) {
-      showNotification("🔔 Alarm Çalıyor!");
-      alert("🔔 Alarm Çalıyor!");
-      alarmTime = null;
-      document.getElementById("alarmStatus").textContent = "Alarm tamamlandı.";
-    }
+  const now = new Date();
+  const current = now.toTimeString().slice(0, 5);
+  if (alarmTime === current) {
+    alert("🔔 Alarm çalıyor!");
+    alarmTime = null;
   }
 }, 1000);
 
-// ============================
-// 🎨 TEMA DEĞİŞTİRME
-// ============================
+// Tema
 function setTheme(theme) {
   document.body.className = theme;
   localStorage.setItem("theme", theme);
 }
-document.addEventListener("DOMContentLoaded", () => {
-  const savedTheme = localStorage.getItem("theme");
-  if (savedTheme) document.body.className = savedTheme;
-});
-
-// ============================
-// 🔔 TARAYICI BİLDİRİMLERİ
-// ============================
-function showNotification(message) {
-  if (!("Notification" in window)) return;
-  if (Notification.permission === "granted") {
-    new Notification("ZAMAN MERKEZİ", { body: message, icon: "icons/icon-192.png" });
-  } else if (Notification.permission !== "denied") {
-    Notification.requestPermission().then(permission => {
-      if (permission === "granted") {
-        new Notification("ZAMAN MERKEZİ", { body: message, icon: "icons/icon-192.png" });
-      }
-    });
-  }
-}
+(function loadTheme() {
+  const saved = localStorage.getItem("theme");
+  if (saved) document.body.className = saved;
+})();
