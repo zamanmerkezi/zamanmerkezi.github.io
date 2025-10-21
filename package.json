@@ -1,0 +1,18 @@
+{
+  "name": "zaman-merkezi-push-server",
+  "version": "1.0.0",
+  "description": "Zaman Merkezi - push server (web-push + schedules)",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "body-parser": "^1.20.2",
+    "express": "^4.18.2",
+    "node-cron": "^3.0.2",
+    "web-push": "^3.4.5",
+    "cors": "^2.8.5",
+    "lowdb": "^5.0.0",
+    "file-sync-storage": "^1.0.2"
+  }
+}
