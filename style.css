@@ -1,162 +1,37 @@
-/* GENEL TASARIM */
 body {
-  font-family: "Segoe UI", Arial, sans-serif;
-  color: white;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto;
   text-align: center;
+  background: #111;
+  color: #fff;
   margin: 0;
   padding: 0;
-  transition: background 1s ease;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: center;
 }
+h1, h2 { margin: 10px 0; }
+.container { max-width: 800px; margin: auto; padding: 20px; }
 
-h1 {
-  margin-top: 30px;
-  font-size: 2.4em;
-  font-weight: bold;
-  text-shadow: 2px 2px 10px rgba(0,0,0,0.5);
-}
-
-.container {
-  width: 90%;
-  max-width: 500px;
-  background: rgba(0,0,0,0.4);
-  border-radius: 15px;
-  padding: 20px;
-  margin: 20px 0;
-  box-shadow: 0 0 15px rgba(255,255,255,0.2);
-}
-
-/* Kartlar */
-.clock, .stopwatch, .countdown, .alarm, .themes, .world-clocks {
-  margin: 15px 0;
-  padding: 15px;
-  border-radius: 12px;
-  background: rgba(0,0,0,0.6);
-  box-shadow: 0 0 10px rgba(255,255,255,0.1);
-}
-
-h2 {
-  margin-bottom: 10px;
-}
-
-/* Butonlar */
 button {
-  padding: 10px 18px;
   margin: 5px;
-  border: none;
-  border-radius: 8px;
-  background: #333;
-  color: white;
-  cursor: pointer;
-  transition: background 0.3s, transform 0.2s;
-}
-
-button:hover {
-  background: #555;
-  transform: scale(1.05);
-}
-
-/* Giriş alanları */
-input {
-  padding: 8px;
+  padding: 8px 14px;
   border: none;
   border-radius: 6px;
-  outline: none;
-  text-align: center;
-  margin: 5px;
+  background: #2563eb;
+  color: #fff;
+  cursor: pointer;
+}
+input {
+  padding: 6px;
+  border-radius: 6px;
+  border: 1px solid #555;
+  background: #1e293b;
+  color: #fff;
 }
 
-/* Dünya Saatleri */
-#worldTimes {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 5px;
-}
+/* 🌈 Temalar */
+body.space { background: radial-gradient(circle at 30% 30%, #000428, #004e92); }
+body.gradient { background: linear-gradient(135deg, #667eea, #764ba2); }
+body.wave { background: linear-gradient(135deg, #43cea2, #185a9d); }
+body.stars { background: radial-gradient(circle at 20% 20%, #0f2027, #203a43, #2c5364); }
+body.light { background: #f1f5f9; color: #111; }
+body.dark { background: #111; color: #fff; }
 
-/* TEMALAR */
-
-/* 🌌 Uzay Teması */
-body.space {
-  background: url('https://cdn.pixabay.com/photo/2017/09/13/08/53/space-2742113_1280.jpg') no-repeat center center/cover;
-}
-
-/* 🌈 Renkli (Gradient) Teması */
-body.gradient {
-  background: linear-gradient(-45deg, #ff6ec4, #7873f5, #42d392, #ff9a44);
-  background-size: 400% 400%;
-  animation: gradientShift 15s ease infinite;
-}
-@keyframes gradientShift {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
-}
-
-/* 🌊 Dalga Teması */
-body.wave {
-  background: linear-gradient(120deg, #89f7fe, #66a6ff);
-  overflow: hidden;
-}
-body.wave::before {
-  content: "";
-  position: absolute;
-  top: 0; left: 0;
-  width: 200%;
-  height: 200%;
-  background: radial-gradient(circle at 50% 50%, rgba(255,255,255,0.2), transparent 70%);
-  animation: waveMove 8s linear infinite;
-}
-@keyframes waveMove {
-  from { transform: translateX(0) translateY(0); }
-  to { transform: translateX(-25%) translateY(-25%); }
-}
-
-/* ✨ Yıldızlı Gökyüzü Teması */
-body.stars {
-  background: radial-gradient(circle at bottom, #00111a 0%, #000000 100%);
-  overflow: hidden;
-}
-body.stars::before {
-  content: "";
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  background: transparent url("https://www.transparenttextures.com/patterns/stardust.png") repeat;
-  animation: starDrift 100s linear infinite;
-  opacity: 0.7;
-}
-@keyframes starDrift {
-  from { background-position: 0 0; }
-  to { background-position: 10000px 10000px; }
-}
-
-/* ☀️ Açık Tema */
-body.light {
-  background: #f5f5f5;
-  color: #222;
-}
-body.light .container {
-  background: rgba(255,255,255,0.8);
-  box-shadow: 0 0 10px rgba(0,0,0,0.2);
-}
-
-/* 🌙 Koyu Tema */
-body.dark {
-  background: #121212;
-  color: #eee;
-}
-body.dark .container {
-  background: rgba(20,20,20,0.8);
-  box-shadow: 0 0 10px rgba(255,255,255,0.1);
-}
-
-/* Mobil uyumluluk */
-@media (max-width: 600px) {
-  h1 { font-size: 1.8em; }
-  .container { width: 95%; padding: 15px; }
-}
+.adsbygoogle { display: block; margin: 20px auto; text-align: center; }
