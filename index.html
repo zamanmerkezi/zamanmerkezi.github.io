@@ -1,195 +1,109 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>ZAMAN MERKEZİ ⏰ — v2.0</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="google-adsense-account" content="ca-pub-3214692314578267" />
+  <title>ZAMAN MERKEZİ ⏰</title>
 
-  <!-- ✅ Google AdSense -->
-  <meta name="google-adsense-account" content="ca-pub-3214692314578267">
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3214692314578267"
-    crossorigin="anonymous"></script>
-
-  <!-- ✅ PWA -->
+  <!-- ✅ PWA Dosyaları -->
   <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#0b1220">
-
-  <!-- ✅ ICONS (kök dizinde) -->
   <link rel="icon" href="icon-192.png" sizes="192x192" type="image/png">
   <link rel="apple-touch-icon" href="icon-512.png">
+  <meta name="theme-color" content="#00bfff" />
 
-  <!-- ✅ CSS -->
-  <link rel="stylesheet" href="style.css">
-
-  <!-- Meta -->
-  <meta name="description" content="Zaman Merkezi — dijital & analog saat, dünya saatleri, kronometre, geri sayım, alarm, takvim, not ve hava durumu.">
+  <!-- ✅ Stil -->
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      color: #fff;
+      background: linear-gradient(135deg, #0b1220, #09203f, #00bfff);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      text-align: center;
+    }
+    h1 {
+      font-size: 2.2rem;
+      margin: 0.5em 0;
+    }
+    .clock {
+      font-size: 3rem;
+      font-weight: bold;
+      margin: 0.3em 0;
+    }
+    .weather {
+      font-size: 1.1rem;
+      margin-top: 0.5em;
+    }
+    .install-btn {
+      margin-top: 1.5em;
+      padding: 12px 24px;
+      font-size: 1rem;
+      background: #00bfff;
+      color: white;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      display: none;
+    }
+  </style>
 </head>
+
 <body>
-  <header class="site-header">
-    <div class="header-inner">
-      <div class="brand">
-        <img src="icon-192.png" alt="Zaman Merkezi" class="logo">
-        <div>
-          <h1>ZAMAN MERKEZİ</h1>
-          <p class="tag">Hızlı • PWA • Reklam uyumlu</p>
-        </div>
-      </div>
-
-      <nav class="nav">
-        <a href="index.html">Ana Sayfa</a>
-        <a href="hakkinda.html">Hakkında</a>
-        <a href="gizlilik.html">Gizlilik</a>
-        <a href="iletisim.html">İletişim</a>
-      </nav>
-    </div>
-  </header>
-
-  <main class="layout">
-    <section class="left-col">
-      <article class="card clock-card">
-        <div class="clock-header">
-          <div class="digital">
-            <div id="clock" class="digital-time">00:00:00</div>
-            <div id="date" class="digital-date">—</div>
-          </div>
-          <div class="analog-wrap">
-            <canvas id="analogClock" width="160" height="160" aria-hidden="true"></canvas>
-          </div>
-        </div>
-
-        <div class="clock-actions">
-          <label for="timezoneSelect">Konum:</label>
-          <select id="timezoneSelect" aria-label="Saat dilimi">
-            <option value="local">Cihaz Saati</option>
-            <option value="Europe/Istanbul">İstanbul</option>
-            <option value="Europe/London">Londra</option>
-            <option value="America/New_York">New York</option>
-            <option value="Asia/Tokyo">Tokyo</option>
-          </select>
-
-          <div class="theme-row">
-            <label for="themeSelect">Tema:</label>
-            <select id="themeSelect" aria-label="Tema seçimi">
-              <option value="auto">Otomatik</option>
-              <option value="space">Uzay</option>
-              <option value="gradient">Degrade</option>
-              <option value="wave">Mavi Dalga</option>
-              <option value="stars">Yıldızlı</option>
-              <option value="light">Açık</option>
-              <option value="dark">Koyu</option>
-            </select>
-          </div>
-        </div>
-      </article>
-
-      <article class="card world-card">
-        <h3>🌍 Dünya Saatleri</h3>
-        <div id="worldTimes" class="world-list" aria-live="polite">Yükleniyor…</div>
-      </article>
-
-      <article class="card weather-card">
-        <h3>🌤 Hava Durumu</h3>
-        <div id="weatherStatus">
-          <div class="weather-row">
-            <div id="weatherIcon">—</div>
-            <div>
-              <div id="weatherTemp">--°C</div>
-              <div id="weatherDesc">Konum izni bekleniyor</div>
-            </div>
-          </div>
-          <small class="muted">Hava durumu için açık anahtar ekleyin (opsiyonel).</small>
-        </div>
-      </article>
-    </section>
-
-    <section class="right-col">
-      <article class="card tools-grid">
-        <div class="tool stopwatch">
-          <h4>⏱ Kronometre</h4>
-          <div id="timer" class="big">00:00</div>
-          <div class="btn-row">
-            <button id="sw-start" class="btn">Başlat</button>
-            <button id="sw-stop" class="btn neutral">Durdur</button>
-            <button id="sw-reset" class="btn danger">Sıfırla</button>
-          </div>
-        </div>
-
-        <div class="tool countdown">
-          <h4>⏳ Geri Sayım</h4>
-          <input id="countdownInput" type="number" min="1" placeholder="Saniye" />
-          <div class="btn-row">
-            <button id="cd-start" class="btn">Başlat</button>
-            <button id="cd-stop" class="btn neutral">Durdur</button>
-          </div>
-          <div id="countdownDisplay" class="big">00</div>
-        </div>
-
-        <div class="tool alarm">
-          <h4>🔔 Alarm</h4>
-          <input id="alarmTime" type="time" />
-          <div class="btn-row">
-            <button id="alarm-set" class="btn">Kur</button>
-            <button id="alarm-clear" class="btn neutral">Kapat</button>
-          </div>
-          <p id="alarmStatus" class="muted">Alarm yok</p>
-        </div>
-
-        <div class="tool notes">
-          <h4>🗒 Günlük Not</h4>
-          <textarea id="noteInput" placeholder="Bugün için not..."></textarea>
-          <div class="btn-row">
-            <button id="saveNote" class="btn">Kaydet</button>
-            <button id="clearNote" class="btn neutral">Sil</button>
-          </div>
-          <div id="noteSaved" class="muted">Henüz not yok</div>
-        </div>
-      </article>
-
-      <article class="card mini-panel">
-        <h4>📅 Mini Takvim</h4>
-        <div id="miniCalendar"></div>
-        <small class="muted">Tarihe tıklayın, o güne not ekleyebilirsiniz.</small>
-      </article>
-
-      <article class="card share-card">
-        <h4>🔗 Paylaş</h4>
-        <button id="shareBtn" class="btn">Sayfayı Paylaş / Linki Kopyala</button>
-        <div class="muted">Web Share API yoksa bağlantı panoya kopyalanır.</div>
-      </article>
-    </section>
-  </main>
-
-  <!-- ✅ Reklam alanı -->
-  <div class="ads-footer">
-    <ins class="adsbygoogle"
-      style="display:block"
-      data-ad-client="ca-pub-3214692314578267"
-      data-ad-slot="1234567890"
-      data-ad-format="auto"
-      data-full-width-responsive="true"></ins>
-    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
-  </div>
-
-  <footer class="site-footer">
-    <div>© <span id="year"></span> Zaman Merkezi • Tüm hakları saklıdır</div>
-    <div class="footer-links">
-      <a href="hakkinda.html">Hakkında</a> •
-      <a href="gizlilik.html">Gizlilik</a> •
-      <a href="iletisim.html">İletişim</a>
-    </div>
-  </footer>
-
-  <!-- ✅ Scriptler -->
-  <script src="script.js"></script>
+  <h1>🕐 ZAMAN MERKEZİ</h1>
+  <div class="clock" id="clock">00:00:00</div>
+  <div class="weather" id="weather">🌤️ Hava durumu yükleniyor...</div>
+  <button class="install-btn" id="installBtn">📲 Ana Ekrana Ekle</button>
 
   <script>
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/service-worker.js')
-          .then(reg => console.log('Service Worker kayıt başarılı:', reg.scope))
-          .catch(err => console.warn('Service Worker kayıt hatası:', err));
-      });
+    // 🕒 Canlı Saat
+    setInterval(() => {
+      const now = new Date();
+      document.getElementById('clock').textContent = now.toLocaleTimeString('tr-TR');
+    }, 1000);
+
+    // 🌤️ Hava Durumu (OpenWeather API)
+    async function getWeather() {
+      try {
+        const res = await fetch("https://api.open-meteo.com/v1/forecast?latitude=41.01&longitude=28.97&current_weather=true");
+        const data = await res.json();
+        const temp = data.current_weather.temperature;
+        const wind = data.current_weather.windspeed;
+        document.getElementById('weather').textContent = `🌡️ ${temp}°C  💨 ${wind} km/s`;
+      } catch {
+        document.getElementById('weather').textContent = "❌ Hava durumu alınamadı";
+      }
     }
+    getWeather();
+
+    // 💾 PWA Servis Worker
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.register("service-worker.js");
+    }
+
+    // 📲 "Ana Ekrana Ekle" Bildirimi
+    let deferredPrompt;
+    const installBtn = document.getElementById("installBtn");
+
+    window.addEventListener("beforeinstallprompt", (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      installBtn.style.display = "block";
+    });
+
+    installBtn.addEventListener("click", async () => {
+      installBtn.style.display = "none";
+      deferredPrompt.prompt();
+      const result = await deferredPrompt.userChoice;
+      if (result.outcome === "accepted") {
+        console.log("📲 Kullanıcı yüklemeyi kabul etti");
+      }
+      deferredPrompt = null;
+    });
   </script>
 </body>
 </html>
