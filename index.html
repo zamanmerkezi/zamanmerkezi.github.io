@@ -2,127 +2,130 @@
 <html lang="tr">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
   <meta name="google-adsense-account" content="ca-pub-3214692314578267" />
-  <title>ZAMAN MERKEZİ ⏰</title>
+  <title>ZAMAN MERKEZİ ⏰ — v2.1</title>
 
-  <!-- ✅ PWA Dosyaları -->
-  <link rel="manifest" href="manifest.json">
-  <link rel="icon" href="icon-192.png" sizes="192x192" type="image/png">
-  <link rel="apple-touch-icon" href="icon-512.png">
+  <link rel="manifest" href="manifest.json" />
+  <link rel="icon" href="icons/icon-192.png" sizes="192x192" />
   <meta name="theme-color" content="#00bfff" />
 
-  <!-- ✅ Stil -->
   <style>
+    :root {
+      --bg: linear-gradient(135deg, #0b1220, #09203f, #00bfff);
+      --text: #fff;
+      --card: rgba(255,255,255,0.1);
+    }
+    body.light {
+      --bg: linear-gradient(135deg, #e6f4ff, #ffffff);
+      --text: #222;
+      --card: rgba(0,0,0,0.05);
+    }
+
     body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: "Segoe UI", sans-serif;
       margin: 0;
-      font-family: 'Segoe UI', sans-serif;
-      color: #fff;
-      background: linear-gradient(135deg, #0b1220, #09203f, #00bfff);
-      min-height: 100vh;
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: flex-start;
+      min-height: 100vh;
       padding: 20px;
+      transition: background 0.5s, color 0.5s;
     }
-
     h1 {
       font-size: 2rem;
-      margin-top: 10px;
-    }
-
-    .clock {
-      font-size: 2.5rem;
-      font-weight: bold;
-      margin: 0.5em 0;
-    }
-
-    .weather {
-      font-size: 1.1rem;
-      margin-bottom: 1.2em;
-    }
-
-    .section {
-      width: 95%;
-      max-width: 400px;
-      background: rgba(255,255,255,0.1);
-      border-radius: 15px;
-      padding: 20px;
-      margin-bottom: 20px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.3);
-    }
-
-    textarea {
-      width: 100%;
-      height: 120px;
-      border: none;
-      border-radius: 10px;
-      padding: 10px;
-      resize: none;
-      font-size: 1rem;
-      font-family: 'Segoe UI';
-    }
-
-    button {
-      padding: 10px 18px;
-      border: none;
-      border-radius: 10px;
-      cursor: pointer;
-      background: #00bfff;
-      color: white;
-      font-weight: bold;
-      margin: 5px;
-    }
-
-    .display {
-      font-size: 1.8rem;
       margin: 10px 0;
     }
-
-    .install-btn {
-      margin-top: 10px;
-      display: none;
+    .section {
+      background: var(--card);
+      border-radius: 15px;
+      padding: 20px;
+      margin: 10px;
+      width: 95%;
+      max-width: 420px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.3);
     }
+    textarea, input, select {
+      width: 100%;
+      padding: 10px;
+      border-radius: 8px;
+      border: none;
+      margin: 5px 0;
+      font-size: 1rem;
+    }
+    button {
+      border: none;
+      border-radius: 8px;
+      padding: 10px 18px;
+      margin: 5px;
+      background: #00bfff;
+      color: #fff;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .display { font-size: 1.6rem; margin: 10px 0; }
+    .clock { font-size: 2.5rem; font-weight: bold; }
+    #installBtn { display: none; margin-top: 10px; }
   </style>
 </head>
-
 <body>
-  <h1>🕐 ZAMAN MERKEZİ</h1>
+  <h1>⏰ ZAMAN MERKEZİ v2.1</h1>
   <div class="clock" id="clock">00:00:00</div>
-  <div class="weather" id="weather">🌤️ Hava durumu yükleniyor...</div>
+  <div id="weather">🌤️ Hava durumu yükleniyor...</div>
 
-  <!-- 📝 NOT DEFTERİ -->
+  <!-- Tema Seçimi -->
   <div class="section">
-    <h2>📝 Not Defteri</h2>
-    <textarea id="notes" placeholder="Notlarını buraya yaz..."></textarea>
-    <button onclick="saveNotes()">💾 Kaydet</button>
-    <button onclick="clearNotes()">🗑️ Temizle</button>
+    <h2>🎨 Tema Seçimi</h2>
+    <select id="themeSelect">
+      <option value="auto">Otomatik</option>
+      <option value="light">Açık</option>
+      <option value="dark">Koyu</option>
+    </select>
   </div>
 
-  <!-- ⏱️ KRONOMETRE -->
+  <!-- Not Defteri -->
   <div class="section">
-    <h2>⏱️ Kronometre</h2>
+    <h2>📝 Not Defteri</h2>
+    <textarea id="notes" placeholder="Notlarını yaz..."></textarea>
+    <button onclick="saveNotes()">Kaydet</button>
+    <button onclick="clearNotes()">Sil</button>
+  </div>
+
+  <!-- Kronometre -->
+  <div class="section">
+    <h2>⏱ Kronometre</h2>
     <div id="stopwatchDisplay" class="display">00:00:00.000</div>
     <button onclick="startStopwatch()">Başlat</button>
     <button onclick="stopStopwatch()">Durdur</button>
     <button onclick="resetStopwatch()">Sıfırla</button>
   </div>
 
-  <!-- ⏳ GERİ SAYIM -->
+  <!-- Geri Sayım -->
   <div class="section">
     <h2>⏳ Geri Sayım</h2>
-    <input type="number" id="countdownInput" placeholder="Süre (saniye)" style="width:90%;padding:8px;border-radius:8px;border:none;text-align:center;">
+    <input type="number" id="countdownInput" placeholder="Süre (saniye)" />
+    <input type="datetime-local" id="dateCountdown" />
     <div id="countdownDisplay" class="display">00:00</div>
     <button onclick="startCountdown()">Başlat</button>
     <button onclick="stopCountdown()">Durdur</button>
     <button onclick="resetCountdown()">Sıfırla</button>
   </div>
 
-  <button class="install-btn" id="installBtn">📲 Ana Ekrana Ekle</button>
+  <!-- Alarm -->
+  <div class="section">
+    <h2>🔔 Alarm</h2>
+    <input type="time" id="alarmTime" />
+    <button onclick="setAlarm()">Kur</button>
+    <button onclick="clearAlarm()">Kapat</button>
+    <div id="alarmStatus">Alarm yok</div>
+  </div>
+
+  <button id="installBtn">📲 Ana Ekrana Ekle</button>
 
   <script>
-    // 🕒 CANLI SAAT
+    // 🕒 SAAT
     setInterval(() => {
       const now = new Date();
       document.getElementById("clock").textContent = now.toLocaleTimeString("tr-TR");
@@ -132,10 +135,8 @@
     async function getWeather() {
       try {
         const res = await fetch("https://api.open-meteo.com/v1/forecast?latitude=41.01&longitude=28.97&current_weather=true");
-        const data = await res.json();
-        const t = data.current_weather.temperature;
-        const w = data.current_weather.windspeed;
-        document.getElementById("weather").textContent = `🌡️ ${t}°C | 💨 ${w} km/s`;
+        const d = await res.json();
+        document.getElementById("weather").textContent = `🌡 ${d.current_weather.temperature}°C | 💨 ${d.current_weather.windspeed} km/s`;
       } catch {
         document.getElementById("weather").textContent = "❌ Hava durumu alınamadı";
       }
@@ -143,95 +144,105 @@
     getWeather();
 
     // 📝 NOT DEFTERİ
-    const notesArea = document.getElementById("notes");
-    notesArea.value = localStorage.getItem("notes") || "";
-    function saveNotes() {
-      localStorage.setItem("notes", notesArea.value);
-      alert("✅ Not kaydedildi!");
-    }
-    function clearNotes() {
-      notesArea.value = "";
-      localStorage.removeItem("notes");
-    }
+    const note = document.getElementById("notes");
+    note.value = localStorage.getItem("notes") || "";
+    function saveNotes() { localStorage.setItem("notes", note.value); alert("✅ Kaydedildi"); }
+    function clearNotes() { note.value = ""; localStorage.removeItem("notes"); }
 
-    // ⏱️ KRONOMETRE
-    let stopwatchInterval, startTime, elapsed = 0;
+    // ⏱ KRONOMETRE
+    let swInt, swStart, elapsed = 0;
     function startStopwatch() {
-      if (stopwatchInterval) return;
-      startTime = Date.now() - elapsed;
-      stopwatchInterval = setInterval(() => {
-        elapsed = Date.now() - startTime;
+      if (swInt) return;
+      swStart = Date.now() - elapsed;
+      swInt = setInterval(() => {
+        elapsed = Date.now() - swStart;
         const ms = String(elapsed % 1000).padStart(3, "0");
-        const totalSeconds = Math.floor(elapsed / 1000);
-        const s = String(totalSeconds % 60).padStart(2, "0");
-        const m = String(Math.floor(totalSeconds / 60) % 60).padStart(2, "0");
-        const h = String(Math.floor(totalSeconds / 3600)).padStart(2, "0");
+        const s = String(Math.floor(elapsed / 1000) % 60).padStart(2, "0");
+        const m = String(Math.floor(elapsed / 60000) % 60).padStart(2, "0");
+        const h = String(Math.floor(elapsed / 3600000)).padStart(2, "0");
         document.getElementById("stopwatchDisplay").textContent = `${h}:${m}:${s}.${ms}`;
       }, 10);
     }
-    function stopStopwatch() {
-      clearInterval(stopwatchInterval);
-      stopwatchInterval = null;
-    }
-    function resetStopwatch() {
-      clearInterval(stopwatchInterval);
-      stopwatchInterval = null;
-      elapsed = 0;
-      document.getElementById("stopwatchDisplay").textContent = "00:00:00.000";
-    }
+    function stopStopwatch() { clearInterval(swInt); swInt = null; }
+    function resetStopwatch() { stopStopwatch(); elapsed = 0; document.getElementById("stopwatchDisplay").textContent = "00:00:00.000"; }
 
     // ⏳ GERİ SAYIM
-    let countdownInterval, countdownTime = 0;
+    let cdInt, cdTime = 0;
     function startCountdown() {
-      if (countdownInterval) return;
-      if (countdownTime <= 0) {
-        countdownTime = parseInt(document.getElementById("countdownInput").value || "0") * 1000;
+      if (cdInt) return;
+      const userInput = document.getElementById("countdownInput").value;
+      const dateInput = document.getElementById("dateCountdown").value;
+      if (dateInput) {
+        cdTime = new Date(dateInput) - new Date();
+      } else {
+        cdTime = parseInt(userInput || "0") * 1000;
       }
-      countdownInterval = setInterval(() => {
-        countdownTime -= 1000;
-        if (countdownTime <= 0) {
-          clearInterval(countdownInterval);
-          countdownInterval = null;
-          document.getElementById("countdownDisplay").textContent = "00:00";
+      if (cdTime <= 0) return alert("Geçerli bir süre gir!");
+      cdInt = setInterval(() => {
+        cdTime -= 1000;
+        if (cdTime <= 0) {
+          resetCountdown();
           alert("⏰ Süre doldu!");
-          return;
+        } else {
+          const t = Math.floor(cdTime / 1000);
+          const m = String(Math.floor(t / 60)).padStart(2,"0");
+          const s = String(t % 60).padStart(2,"0");
+          document.getElementById("countdownDisplay").textContent = `${m}:${s}`;
         }
-        const totalSeconds = countdownTime / 1000;
-        const m = String(Math.floor(totalSeconds / 60)).padStart(2, "0");
-        const s = String(Math.floor(totalSeconds % 60)).padStart(2, "0");
-        document.getElementById("countdownDisplay").textContent = `${m}:${s}`;
       }, 1000);
     }
-    function stopCountdown() {
-      clearInterval(countdownInterval);
-      countdownInterval = null;
-    }
+    function stopCountdown() { clearInterval(cdInt); cdInt = null; }
     function resetCountdown() {
-      clearInterval(countdownInterval);
-      countdownInterval = null;
-      countdownTime = 0;
+      clearInterval(cdInt); cdInt = null; cdTime = 0;
       document.getElementById("countdownDisplay").textContent = "00:00";
     }
 
-    // 💾 SERVİS WORKER
-    if ("serviceWorker" in navigator) {
-      navigator.serviceWorker.register("service-worker.js");
+    // 🔔 ALARM
+    let alarmTime = null, alarmActive = false;
+    function setAlarm() {
+      alarmTime = document.getElementById("alarmTime").value;
+      if (!alarmTime) return alert("Saat seç!");
+      alarmActive = true;
+      document.getElementById("alarmStatus").textContent = "⏰ Alarm kuruldu: " + alarmTime;
     }
+    function clearAlarm() {
+      alarmActive = false;
+      document.getElementById("alarmStatus").textContent = "Alarm yok";
+    }
+    setInterval(() => {
+      if (alarmActive) {
+        const now = new Date();
+        const current = now.toTimeString().slice(0,5);
+        if (current === alarmTime) {
+          alert("🔔 Alarm zamanı!");
+          const audio = new Audio("https://actions.google.com/sounds/v1/alarms/alarm_clock.ogg");
+          audio.play();
+          clearAlarm();
+        }
+      }
+    }, 1000);
 
-    // 📲 ANA EKRANA EKLE
+    // 🌗 TEMA
+    const themeSelect = document.getElementById("themeSelect");
+    function applyTheme(mode) {
+      if (mode === "light") document.body.classList.add("light");
+      else if (mode === "dark") document.body.classList.remove("light");
+      else if (window.matchMedia("(prefers-color-scheme: light)").matches)
+        document.body.classList.add("light");
+      else document.body.classList.remove("light");
+    }
+    themeSelect.onchange = () => applyTheme(themeSelect.value);
+    applyTheme("auto");
+
+    // 📲 PWA
+    if ("serviceWorker" in navigator) navigator.serviceWorker.register("service-worker.js");
     let deferredPrompt;
     const installBtn = document.getElementById("installBtn");
-    window.addEventListener("beforeinstallprompt", (e) => {
-      e.preventDefault();
-      deferredPrompt = e;
-      installBtn.style.display = "block";
+    window.addEventListener("beforeinstallprompt", e => {
+      e.preventDefault(); deferredPrompt = e; installBtn.style.display = "block";
     });
     installBtn.addEventListener("click", async () => {
-      deferredPrompt.prompt();
-      const choice = await deferredPrompt.userChoice;
-      if (choice.outcome === "accepted") console.log("Yüklendi");
-      deferredPrompt = null;
-      installBtn.style.display = "none";
+      deferredPrompt.prompt(); await deferredPrompt.userChoice; deferredPrompt = null; installBtn.style.display = "none";
     });
   </script>
 </body>
