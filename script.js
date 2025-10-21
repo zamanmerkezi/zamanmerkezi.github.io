@@ -1,215 +1,169 @@
-/* ===========================
-   AŞAMA 1 - script.js
-   - Saat & tarih
-   - Dünya saatleri (İstanbul, Londra, New York, Tokyo)
-   - Kronometre
-   - Geri sayım
-   - Alarm (basit alert + local status)
-   - Tema sistemi (otomatik + manuel, localStorage)
-   - Share API (basit)
-   =========================== */
+/* 🕒 ZAMAN MERKEZİ v2.0 - Ana JavaScript */
 
-/* ---------- Saat & Tarih ---------- */
+// =============== SAAT & TARİH ===============
 function updateClock() {
   const now = new Date();
-  const clockEl = document.getElementById('clock');
-  const dateEl = document.getElementById('date');
-  clockEl.textContent = now.toLocaleTimeString('tr-TR');
-  dateEl.textContent = now.toLocaleDateString('tr-TR', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+  document.getElementById("digitalClock").textContent = now.toLocaleTimeString("tr-TR");
+  document.getElementById("digitalDate").textContent = now.toLocaleDateString("tr-TR", {
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric"
+  });
 }
 setInterval(updateClock, 1000);
 updateClock();
 
-/* ---------- Dünya Saatleri ---------- */
-/* Offsets are example values relative to UTC; you can expand later */
-const cities = {
-  "İstanbul": 3,
-  "Londra": 0,
-  "New York": -4,
-  "Tokyo": 9
+// =============== DÜNYA SAATLERİ ===============
+const worldCities = {
+  "Londra": "Europe/London",
+  "New York": "America/New_York",
+  "Tokyo": "Asia/Tokyo",
+  "Sydney": "Australia/Sydney",
+  "İstanbul": "Europe/Istanbul"
 };
-
 function updateWorldTimes() {
-  const container = document.getElementById('worldTimes');
-  container.innerHTML = '';
-  const now = new Date();
-  const utc = now.getTime() + (now.getTimezoneOffset() * 60000);
-  for (const [city, offset] of Object.entries(cities)) {
-    const local = new Date(utc + (3600000 * offset));
-    const timeStr = local.toLocaleTimeString('tr-TR');
-    const el = document.createElement('div');
-    el.textContent = `${city}: ${timeStr}`;
-    container.appendChild(el);
+  const container = document.getElementById("worldTimes");
+  container.innerHTML = "";
+  for (let city in worldCities) {
+    const time = new Date().toLocaleTimeString("tr-TR", { timeZone: worldCities[city] });
+    const div = document.createElement("div");
+    div.textContent = `${city}: ${time}`;
+    container.appendChild(div);
   }
 }
 setInterval(updateWorldTimes, 1000);
 updateWorldTimes();
 
-/* ---------- Kronometre (Stopwatch) ---------- */
-let swInterval = null;
-let swSeconds = 0;
-let swRunning = false;
+// =============== KRONOMETRE ===============
+let timerInterval;
+let timerSeconds = 0;
 
-function renderStopwatch() {
-  const mins = String(Math.floor(swSeconds / 60)).padStart(2, '0');
-  const secs = String(swSeconds % 60).padStart(2, '0');
-  document.getElementById('timer').textContent = `${mins}:${secs}`;
+function formatTime(sec) {
+  const m = Math.floor(sec / 60);
+  const s = sec % 60;
+  return `${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`;
+}
+function start() {
+  if (!timerInterval) {
+    timerInterval = setInterval(() => {
+      timerSeconds++;
+      document.getElementById("timer").textContent = formatTime(timerSeconds);
+    }, 1000);
+  }
+}
+function stop() {
+  clearInterval(timerInterval);
+  timerInterval = null;
+}
+function reset() {
+  stop();
+  timerSeconds = 0;
+  document.getElementById("timer").textContent = "00:00";
 }
 
-function swStart() {
-  if (swRunning) return;
-  swRunning = true;
-  swInterval = setInterval(() => {
-    swSeconds++;
-    renderStopwatch();
-  }, 1000);
-}
-function swStop() {
-  swRunning = false;
-  clearInterval(swInterval);
-}
-function swReset() {
-  swRunning = false;
-  clearInterval(swInterval);
-  swSeconds = 0;
-  renderStopwatch();
-}
-
-/* attach SW buttons */
-document.getElementById('sw-start').addEventListener('click', swStart);
-document.getElementById('sw-stop').addEventListener('click', swStop);
-document.getElementById('sw-reset').addEventListener('click', swReset);
-
-/* ---------- Geri Sayım (Countdown) ---------- */
-let cdInterval = null;
-let cdRemaining = 0;
-
-function renderCountdown() {
-  document.getElementById('countdownDisplay').textContent = (cdRemaining >= 0) ? cdRemaining : '00';
-}
-
+// =============== GERİ SAYIM ===============
+let countdownInterval;
 function startCountdown() {
-  const raw = parseInt(document.getElementById('countdownInput').value);
-  if (!raw || raw <= 0) return alert('Lütfen geçerli bir saniye girin.');
-  cdRemaining = raw;
-  clearInterval(cdInterval);
-  renderCountdown();
-  cdInterval = setInterval(() => {
-    cdRemaining--;
-    renderCountdown();
-    if (cdRemaining <= 0) {
-      clearInterval(cdInterval);
-      cdRemaining = 0;
-      renderCountdown();
-      // Basit uyarı (Aşama2'de bildirim eklenecek)
-      alert('⏰ Süre doldu!');
+  let duration = parseInt(document.getElementById("countdownInput").value);
+  const display = document.getElementById("countdownDisplay");
+
+  clearInterval(countdownInterval);
+  countdownInterval = setInterval(() => {
+    if (duration > 0) {
+      duration--;
+      display.textContent = duration + " sn";
+    } else {
+      clearInterval(countdownInterval);
+      display.textContent = "⏰ Süre Doldu!";
+      playAlarmSound();
     }
   }, 1000);
 }
 
-function stopCountdown() {
-  clearInterval(cdInterval);
-}
-
-/* attach CD buttons */
-document.getElementById('cd-start').addEventListener('click', startCountdown);
-document.getElementById('cd-stop').addEventListener('click', stopCountdown);
-
-/* ---------- Alarm (basit) ---------- */
-let alarmTime = localStorage.getItem('zm_alarm') || null;
-
+// =============== ALARM ===============
+let alarmTime = null;
 function setAlarm() {
-  const val = document.getElementById('alarmTime').value;
-  if (!val) return alert('Lütfen bir saat seçin.');
-  alarmTime = val;
-  localStorage.setItem('zm_alarm', alarmTime);
-  document.getElementById('alarmStatus').textContent = `Alarm kuruldu: ${alarmTime}`;
+  const time = document.getElementById("alarmTime").value;
+  if (time) {
+    alarmTime = time;
+    document.getElementById("alarmStatus").textContent = "🔔 Alarm kuruldu: " + time;
+  }
 }
-function clearAlarm() {
-  alarmTime = null;
-  localStorage.removeItem('zm_alarm');
-  document.getElementById('alarmStatus').textContent = 'Alarm yok';
-}
-document.getElementById('alarm-set').addEventListener('click', setAlarm);
-document.getElementById('alarm-clear').addEventListener('click', clearAlarm);
-
-/* Alarm kontrol (HH:MM) */
 setInterval(() => {
-  if (!alarmTime) return;
   const now = new Date();
-  const cur = now.toTimeString().slice(0,5);
-  if (cur === alarmTime) {
-    // Basit alert (Aşama2'de Notification API eklenecek)
-    alert(`🔔 Alarm: ${alarmTime}`);
-    // Bir kere çalsın
-    clearAlarm();
+  const currentTime = now.toTimeString().slice(0, 5);
+  if (alarmTime === currentTime) {
+    playAlarmSound();
+    alert("🔔 Alarm çalıyor!");
+    alarmTime = null;
   }
 }, 1000);
 
-/* sayfa yüklendiğinde mevcut alarmı göster */
-if (alarmTime) {
-  document.getElementById('alarmStatus').textContent = `Alarm kuruldu: ${alarmTime}`;
+function playAlarmSound() {
+  const sound = new Audio("https://actions.google.com/sounds/v1/alarms/digital_watch_alarm_long.ogg");
+  sound.play();
 }
 
-/* ---------- Tema Sistemi (Otomatik + Manuel) ---------- */
-const themeSelect = document.getElementById('themeSelect');
+// =============== NOT DEFTERİ ===============
+const noteArea = document.getElementById("notes");
+noteArea.value = localStorage.getItem("zamanNotlar") || "";
+noteArea.addEventListener("input", () => {
+  localStorage.setItem("zamanNotlar", noteArea.value);
+});
 
-function applyTheme(theme) {
-  document.body.classList.remove('space','gradient','wave','stars','light','dark');
-  if (theme === 'auto') {
-    // Saat bazlı otomatik: gece 19:00-06:00 koyu
-    const h = new Date().getHours();
-    if (h >= 19 || h < 6) document.body.classList.add('dark');
-    else document.body.classList.add('light');
-  } else {
-    document.body.classList.add(theme);
+// =============== TAKVİM ===============
+function loadCalendar() {
+  const now = new Date();
+  const monthDays = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
+  const today = now.getDate();
+  const cal = document.getElementById("miniCalendar");
+  cal.innerHTML = "";
+  for (let d = 1; d <= monthDays; d++) {
+    const div = document.createElement("div");
+    div.textContent = d;
+    if (d === today) div.classList.add("today");
+    cal.appendChild(div);
   }
 }
+loadCalendar();
 
-/* yüklenen temayı uygula (localStorage) */
-(function initTheme() {
-  const saved = localStorage.getItem('zm_theme') || 'auto';
-  themeSelect.value = saved;
-  applyTheme(saved);
+// =============== HAVA DURUMU (Open-Meteo API) ===============
+async function getWeather() {
+  try {
+    const res = await fetch("https://api.open-meteo.com/v1/forecast?latitude=41.0082&longitude=28.9784&current_weather=true");
+    const data = await res.json();
+    const w = data.current_weather;
+    document.getElementById("weather").textContent =
+      `🌡 ${w.temperature}°C, 💨 ${w.windspeed} km/s`;
+  } catch {
+    document.getElementById("weather").textContent = "⚠️ Hava bilgisi alınamadı.";
+  }
+}
+getWeather();
+setInterval(getWeather, 600000); // 10 dakikada bir
+
+// =============== TEMA SİSTEMİ ===============
+function setTheme(name) {
+  document.body.className = "";
+  document.body.classList.add("theme-" + name);
+  localStorage.setItem("theme", name);
+}
+const savedTheme = localStorage.getItem("theme");
+if (savedTheme) setTheme(savedTheme);
+
+// =============== OTOMATİK GECE/GÜNDÜZ MODU ===============
+(function autoTheme() {
+  const hour = new Date().getHours();
+  if (!savedTheme) {
+    if (hour >= 7 && hour < 20) setTheme("gradient");
+    else setTheme("dark");
+  }
 })();
 
-themeSelect.addEventListener('change', () => {
-  const val = themeSelect.value;
-  localStorage.setItem('zm_theme', val);
-  applyTheme(val);
-});
-
-/* ---------- Share (Web Share API basit) ---------- */
-const shareBtn = document.getElementById('shareBtn');
-shareBtn.addEventListener('click', async () => {
-  if (navigator.share) {
-    try {
-      await navigator.share({
-        title: document.title,
-        text: 'Zaman Merkezi — Hızlı saat uygulaması',
-        url: location.href
-      });
-    } catch (err) {
-      console.warn('Share cancelled or failed', err);
-    }
-  } else {
-    // fallback: kopyala
-    try {
-      await navigator.clipboard.writeText(location.href);
-      alert('Sayfa linki kopyalandı.');
-    } catch (e) {
-      alert('Paylaşma desteklenmiyor, linki kopyalayın: ' + location.href);
-    }
-  }
-});
-
-/* ---------- Footer Yılı ---------- */
-document.getElementById('year').textContent = new Date().getFullYear();
-
-/* ---------- Küçük UX iyileştirmeleri ---------- */
-/* Klavye ile input submit engelle */
-document.querySelectorAll('input').forEach(i => {
-  i.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter') e.preventDefault();
-  });
-});
+// =============== SERVICE WORKER ===============
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("service-worker.js")
+    .then(() => console.log("✅ Service Worker aktif"))
+    .catch(e => console.log("❌ SW hatası:", e));
+}
