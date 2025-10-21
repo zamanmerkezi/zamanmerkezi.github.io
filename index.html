@@ -1,249 +1,163 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1.0" />
-  <meta name="google-adsense-account" content="ca-pub-3214692314578267" />
-  <title>ZAMAN MERKEZİ ⏰ — v2.1</title>
-
-  <link rel="manifest" href="manifest.json" />
-  <link rel="icon" href="icons/icon-192.png" sizes="192x192" />
+  <title>ZAMAN MERKEZİ — Push Ready</title>
   <meta name="theme-color" content="#00bfff" />
-
+  <link rel="manifest" href="manifest.json" />
+  <link rel="icon" href="icon-192.png" />
   <style>
-    :root {
-      --bg: linear-gradient(135deg, #0b1220, #09203f, #00bfff);
-      --text: #fff;
-      --card: rgba(255,255,255,0.1);
-    }
-    body.light {
-      --bg: linear-gradient(135deg, #e6f4ff, #ffffff);
-      --text: #222;
-      --card: rgba(0,0,0,0.05);
-    }
-
-    body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: "Segoe UI", sans-serif;
-      margin: 0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      min-height: 100vh;
-      padding: 20px;
-      transition: background 0.5s, color 0.5s;
-    }
-    h1 {
-      font-size: 2rem;
-      margin: 10px 0;
-    }
-    .section {
-      background: var(--card);
-      border-radius: 15px;
-      padding: 20px;
-      margin: 10px;
-      width: 95%;
-      max-width: 420px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.3);
-    }
-    textarea, input, select {
-      width: 100%;
-      padding: 10px;
-      border-radius: 8px;
-      border: none;
-      margin: 5px 0;
-      font-size: 1rem;
-    }
-    button {
-      border: none;
-      border-radius: 8px;
-      padding: 10px 18px;
-      margin: 5px;
-      background: #00bfff;
-      color: #fff;
-      font-weight: bold;
-      cursor: pointer;
-    }
-    .display { font-size: 1.6rem; margin: 10px 0; }
-    .clock { font-size: 2.5rem; font-weight: bold; }
-    #installBtn { display: none; margin-top: 10px; }
+    body { font-family: "Segoe UI", sans-serif; background: linear-gradient(135deg,#0b1220,#09203f,#00bfff); color:#fff; margin:0; padding:18px; }
+    .card { background: rgba(255,255,255,0.06); padding:12px; border-radius:10px; margin-bottom:12px; max-width:720px; }
+    h1{margin-top:0}
+    input, textarea, select, button { width:100%; padding:10px; margin:6px 0; border-radius:8px; border:none; }
+    .row { display:flex; gap:8px; }
+    .col { flex:1; }
   </style>
 </head>
 <body>
-  <h1>⏰ ZAMAN MERKEZİ v2.1</h1>
-  <div class="clock" id="clock">00:00:00</div>
-  <div id="weather">🌤️ Hava durumu yükleniyor...</div>
+  <h1>⏰ ZAMAN MERKEZİ (Push Ready)</h1>
 
-  <!-- Tema Seçimi -->
-  <div class="section">
-    <h2>🎨 Tema Seçimi</h2>
-    <select id="themeSelect">
-      <option value="auto">Otomatik</option>
-      <option value="light">Açık</option>
-      <option value="dark">Koyu</option>
-    </select>
+  <div class="card">
+    <h3>Canlı Saat</h3>
+    <div id="clock" style="font-size:1.6rem;font-weight:bold;">--:--:--</div>
   </div>
 
-  <!-- Not Defteri -->
-  <div class="section">
-    <h2>📝 Not Defteri</h2>
-    <textarea id="notes" placeholder="Notlarını yaz..."></textarea>
-    <button onclick="saveNotes()">Kaydet</button>
-    <button onclick="clearNotes()">Sil</button>
+  <div class="card">
+    <h3>Bildirim & Push</h3>
+    <button id="btnRequest">🔔 Bildirim İzni İste</button>
+    <button id="btnSubscribe">📡 Push Abone Ol</button>
+    <button id="btnSendTest">✉️ Tüm Abonelere Test Gönder</button>
+    <div id="pushStatus"></div>
   </div>
 
-  <!-- Kronometre -->
-  <div class="section">
-    <h2>⏱ Kronometre</h2>
-    <div id="stopwatchDisplay" class="display">00:00:00.000</div>
-    <button onclick="startStopwatch()">Başlat</button>
-    <button onclick="stopStopwatch()">Durdur</button>
-    <button onclick="resetStopwatch()">Sıfırla</button>
+  <div class="card">
+    <h3>Tekrarlayan Alarm Ekle</h3>
+    <div class="row">
+      <input id="repeatTime" type="time" class="col" />
+      <select id="repeatPattern" class="col">
+        <option value="daily">Her gün</option>
+        <option value="weekdays">Hafta içi</option>
+        <option value="weekly">Her hafta (aynı gün)</option>
+      </select>
+    </div>
+    <button id="addRepeat">➕ Ekle</button>
+    <div id="repeatList"></div>
   </div>
 
-  <!-- Geri Sayım -->
-  <div class="section">
-    <h2>⏳ Geri Sayım</h2>
-    <input type="number" id="countdownInput" placeholder="Süre (saniye)" />
-    <input type="datetime-local" id="dateCountdown" />
-    <div id="countdownDisplay" class="display">00:00</div>
-    <button onclick="startCountdown()">Başlat</button>
-    <button onclick="stopCountdown()">Durdur</button>
-    <button onclick="resetCountdown()">Sıfırla</button>
+  <div class="card">
+    <h3>Not Hatırlatıcı (yerel)</h3>
+    <textarea id="noteText" placeholder="Not..."></textarea>
+    <input id="noteDate" type="datetime-local" />
+    <button id="addNoteReminder">Hatırlatıcı Kur</button>
+    <div id="noteStatus"></div>
   </div>
-
-  <!-- Alarm -->
-  <div class="section">
-    <h2>🔔 Alarm</h2>
-    <input type="time" id="alarmTime" />
-    <button onclick="setAlarm()">Kur</button>
-    <button onclick="clearAlarm()">Kapat</button>
-    <div id="alarmStatus">Alarm yok</div>
-  </div>
-
-  <button id="installBtn">📲 Ana Ekrana Ekle</button>
 
   <script>
-    // 🕒 SAAT
-    setInterval(() => {
-      const now = new Date();
-      document.getElementById("clock").textContent = now.toLocaleTimeString("tr-TR");
-    }, 1000);
+    // Saat
+    setInterval(()=> document.getElementById('clock').textContent = new Date().toLocaleTimeString('tr-TR'), 1000);
 
-    // 🌦️ HAVA DURUMU
-    async function getWeather() {
+    // Service Worker register
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/service-worker.js').then(() => {
+        console.log('Service Worker registered');
+      }).catch(e => console.error('SW register error', e));
+    }
+
+    // Request notifications
+    document.getElementById('btnRequest').addEventListener('click', async () => {
+      const perm = await Notification.requestPermission();
+      document.getElementById('pushStatus').textContent = 'Permission: ' + perm;
+    });
+
+    // Get VAPID key from server and subscribe
+    async function getVapidKey() {
+      const res = await fetch('/vapidPublicKey');
+      const j = await res.json();
+      return j.publicKey;
+    }
+
+    function urlBase64ToUint8Array(base64String) {
+      const padding = '='.repeat((4 - base64String.length % 4) % 4);
+      const base64 = (base64String + padding).replace(/\-/g, '+').replace(/_/g, '/');
+      const rawData = atob(base64);
+      const outputArray = new Uint8Array(rawData.length);
+      for (let i = 0; i < rawData.length; ++i) outputArray[i] = rawData.charCodeAt(i);
+      return outputArray;
+    }
+
+    document.getElementById('btnSubscribe').addEventListener('click', async () => {
       try {
-        const res = await fetch("https://api.open-meteo.com/v1/forecast?latitude=41.01&longitude=28.97&current_weather=true");
-        const d = await res.json();
-        document.getElementById("weather").textContent = `🌡 ${d.current_weather.temperature}°C | 💨 ${d.current_weather.windspeed} km/s`;
-      } catch {
-        document.getElementById("weather").textContent = "❌ Hava durumu alınamadı";
+        const vapidKey = await getVapidKey();
+        const reg = await navigator.serviceWorker.ready;
+        const sub = await reg.pushManager.subscribe({
+          userVisibleOnly: true,
+          applicationServerKey: urlBase64ToUint8Array(vapidKey)
+        });
+        // gönder sunucuya
+        await fetch('/subscribe', { method: 'POST', body: JSON.stringify(sub), headers: { 'Content-Type': 'application/json' }});
+        document.getElementById('pushStatus').textContent = 'Abonelik gönderildi.';
+      } catch (e) {
+        document.getElementById('pushStatus').textContent = 'Abone olurken hata: ' + (e.message || e);
       }
+    });
+
+    document.getElementById('btnSendTest').addEventListener('click', async () => {
+      const resp = await fetch('/sendTest', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({title:'Test', body:'Bu bir test bildirimi', url:'/'})});
+      const j = await resp.json();
+      alert('Gönderildi: ' + JSON.stringify(j));
+    });
+
+    // Repeat alarms (local storage + server schedule optional)
+    function loadRepeats() {
+      const arr = JSON.parse(localStorage.getItem('repeatAlarms') || '[]');
+      const el = document.getElementById('repeatList');
+      el.innerHTML = arr.map((r,i)=> `<div>${r.time} — ${r.pattern} <button data-i="${i}" class="del">Sil</button></div>`).join('');
     }
-    getWeather();
-
-    // 📝 NOT DEFTERİ
-    const note = document.getElementById("notes");
-    note.value = localStorage.getItem("notes") || "";
-    function saveNotes() { localStorage.setItem("notes", note.value); alert("✅ Kaydedildi"); }
-    function clearNotes() { note.value = ""; localStorage.removeItem("notes"); }
-
-    // ⏱ KRONOMETRE
-    let swInt, swStart, elapsed = 0;
-    function startStopwatch() {
-      if (swInt) return;
-      swStart = Date.now() - elapsed;
-      swInt = setInterval(() => {
-        elapsed = Date.now() - swStart;
-        const ms = String(elapsed % 1000).padStart(3, "0");
-        const s = String(Math.floor(elapsed / 1000) % 60).padStart(2, "0");
-        const m = String(Math.floor(elapsed / 60000) % 60).padStart(2, "0");
-        const h = String(Math.floor(elapsed / 3600000)).padStart(2, "0");
-        document.getElementById("stopwatchDisplay").textContent = `${h}:${m}:${s}.${ms}`;
-      }, 10);
-    }
-    function stopStopwatch() { clearInterval(swInt); swInt = null; }
-    function resetStopwatch() { stopStopwatch(); elapsed = 0; document.getElementById("stopwatchDisplay").textContent = "00:00:00.000"; }
-
-    // ⏳ GERİ SAYIM
-    let cdInt, cdTime = 0;
-    function startCountdown() {
-      if (cdInt) return;
-      const userInput = document.getElementById("countdownInput").value;
-      const dateInput = document.getElementById("dateCountdown").value;
-      if (dateInput) {
-        cdTime = new Date(dateInput) - new Date();
-      } else {
-        cdTime = parseInt(userInput || "0") * 1000;
+    loadRepeats();
+    document.getElementById('addRepeat').addEventListener('click', () => {
+      const t = document.getElementById('repeatTime').value;
+      const p = document.getElementById('repeatPattern').value;
+      if (!t) return alert('Saat gir');
+      const arr = JSON.parse(localStorage.getItem('repeatAlarms')||'[]'); arr.push({time:t, pattern:p}); localStorage.setItem('repeatAlarms', JSON.stringify(arr)); loadRepeats();
+    });
+    document.getElementById('repeatList').addEventListener('click', e => {
+      if (e.target.classList.contains('del')) {
+        const i = +e.target.dataset.i;
+        const arr = JSON.parse(localStorage.getItem('repeatAlarms')||'[]'); arr.splice(i,1); localStorage.setItem('repeatAlarms', JSON.stringify(arr)); loadRepeats();
       }
-      if (cdTime <= 0) return alert("Geçerli bir süre gir!");
-      cdInt = setInterval(() => {
-        cdTime -= 1000;
-        if (cdTime <= 0) {
-          resetCountdown();
-          alert("⏰ Süre doldu!");
-        } else {
-          const t = Math.floor(cdTime / 1000);
-          const m = String(Math.floor(t / 60)).padStart(2,"0");
-          const s = String(t % 60).padStart(2,"0");
-          document.getElementById("countdownDisplay").textContent = `${m}:${s}`;
-        }
-      }, 1000);
-    }
-    function stopCountdown() { clearInterval(cdInt); cdInt = null; }
-    function resetCountdown() {
-      clearInterval(cdInt); cdInt = null; cdTime = 0;
-      document.getElementById("countdownDisplay").textContent = "00:00";
-    }
+    });
 
-    // 🔔 ALARM
-    let alarmTime = null, alarmActive = false;
-    function setAlarm() {
-      alarmTime = document.getElementById("alarmTime").value;
-      if (!alarmTime) return alert("Saat seç!");
-      alarmActive = true;
-      document.getElementById("alarmStatus").textContent = "⏰ Alarm kuruldu: " + alarmTime;
-    }
-    function clearAlarm() {
-      alarmActive = false;
-      document.getElementById("alarmStatus").textContent = "Alarm yok";
-    }
+    // local check repeats every minute
     setInterval(() => {
-      if (alarmActive) {
-        const now = new Date();
-        const current = now.toTimeString().slice(0,5);
-        if (current === alarmTime) {
-          alert("🔔 Alarm zamanı!");
-          const audio = new Audio("https://actions.google.com/sounds/v1/alarms/alarm_clock.ogg");
-          audio.play();
-          clearAlarm();
-        }
+      const arr = JSON.parse(localStorage.getItem('repeatAlarms')||'[]');
+      const now = new Date(); const cur = now.toTimeString().slice(0,5);
+      arr.forEach(r => { if (r.time === cur) triggerLocal('Tekrarlayan alarm: ' + r.time); });
+    }, 60*1000);
+
+    function triggerLocal(text) {
+      if (Notification.permission === 'granted') {
+        navigator.serviceWorker.getRegistration().then(reg => {
+          if (reg) reg.showNotification('⏰ Zaman Merkezi', { body: text, icon: '/icon-192.png', vibrate:[200,100,200]});
+          else new Notification('⏰ Zaman Merkezi', { body: text });
+        });
+      } else {
+        alert(text);
       }
-    }, 1000);
-
-    // 🌗 TEMA
-    const themeSelect = document.getElementById("themeSelect");
-    function applyTheme(mode) {
-      if (mode === "light") document.body.classList.add("light");
-      else if (mode === "dark") document.body.classList.remove("light");
-      else if (window.matchMedia("(prefers-color-scheme: light)").matches)
-        document.body.classList.add("light");
-      else document.body.classList.remove("light");
     }
-    themeSelect.onchange = () => applyTheme(themeSelect.value);
-    applyTheme("auto");
 
-    // 📲 PWA
-    if ("serviceWorker" in navigator) navigator.serviceWorker.register("service-worker.js");
-    let deferredPrompt;
-    const installBtn = document.getElementById("installBtn");
-    window.addEventListener("beforeinstallprompt", e => {
-      e.preventDefault(); deferredPrompt = e; installBtn.style.display = "block";
+    // Note reminder (local)
+    document.getElementById('addNoteReminder').addEventListener('click', () => {
+      const txt = document.getElementById('noteText').value;
+      const dt = document.getElementById('noteDate').value;
+      if (!txt || !dt) return alert('Not ve tarih gir');
+      const diff = new Date(dt) - new Date();
+      if (diff <= 0) return alert('Gelecek tarih seç');
+      setTimeout(()=> triggerLocal('Not hatırlatma: ' + txt), diff);
+      document.getElementById('noteStatus').textContent = 'Hatırlatıcı kuruldu.';
     });
-    installBtn.addEventListener("click", async () => {
-      deferredPrompt.prompt(); await deferredPrompt.userChoice; deferredPrompt = null; installBtn.style.display = "none";
-    });
+
   </script>
 </body>
 </html>
