@@ -1,60 +1,261 @@
-/* Temel düzen ve responsive */
-:root{
-  --bg:#0b1220;
-  --card: rgba(255,255,255,0.04);
-  --muted: rgba(255,255,255,0.7);
-  --accent: #2563eb;
-  --radius:12px;
-  --gap:14px;
+/* 🎨 ZAMAN MERKEZİ v2.0 Tasarım Stili */
+
+/* Temel reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-*{box-sizing:border-box}
-html,body{height:100%;margin:0;font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial}
-body{background:linear-gradient(180deg,#071022 0%, #0f172a 100%);color:#e6eef8;display:flex;flex-direction:column;min-height:100vh}
-.site-header{padding:14px 18px;background:linear-gradient(90deg, rgba(255,255,255,0.02), rgba(0,0,0,0.06));backdrop-filter: blur(4px)}
-.header-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:12px}
-.brand{margin:0;font-size:20px}
-.top-nav a{color:var(--muted);text-decoration:none;margin-left:12px;font-weight:500}
-.container{max-width:1100px;margin:20px auto;padding:16px;width:calc(100% - 32px)}
-.panel{background:var(--card);padding:16px;border-radius:var(--radius);margin-bottom:16px;box-shadow:0 6px 20px rgba(2,6,23,0.6)}
-.clock-panel .meta{display:flex;flex-direction:column;align-items:center;gap:8px}
-.clock{font-size:56px;font-weight:700;letter-spacing:1px}
-.date{font-size:14px;color:var(--muted)}
-.controls{display:flex;justify-content:center;margin-top:12px}
-.theme-tools label{margin-right:8px;color:var(--muted);font-size:14px}
-.theme-tools select{padding:8px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);background:transparent;color:inherit}
+html, body {
+  font-family: "Poppins", system-ui, sans-serif;
+  background: linear-gradient(135deg, #0b1220, #182b46);
+  color: #fff;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  line-height: 1.5;
+}
 
-/* World list */
-.world-list{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
-.world-list > div{background:rgba(255,255,255,0.02);padding:10px 12px;border-radius:10px;min-width:140px;text-align:center;font-weight:600}
+/* Başlık */
+header.site-header {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 0.8rem 1rem;
+}
 
-/* Tools grid */
-.tools-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
-.tool{padding:12px;border-radius:10px;background:rgba(255,255,255,0.02)}
-.big{font-size:28px;font-weight:700;margin-top:10px}
+.header-inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+}
 
-/* Buttons and inputs */
-.btn-row{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;justify-content:center}
-button{cursor:pointer;border:0;padding:8px 12px;border-radius:8px;background:var(--accent);color:white;font-weight:600;box-shadow:0 4px 12px rgba(37,99,235,0.12)}
-input[type="number"], input[type="time"]{padding:8px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);background:transparent;color:inherit;width:100%;max-width:200px}
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
 
-/* Ad wrapper */
-.ads-wrapper{margin-top:18px;text-align:center}
+.logo {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+}
+
+.brand h1 {
+  font-size: 1.3rem;
+  letter-spacing: 0.5px;
+  color: #00bfff;
+}
+
+.tag {
+  font-size: 0.8rem;
+  opacity: 0.7;
+}
+
+.nav a {
+  color: #fff;
+  text-decoration: none;
+  margin-left: 1rem;
+  opacity: 0.8;
+  transition: opacity 0.2s;
+}
+.nav a:hover { opacity: 1; }
+
+/* Layout */
+.layout {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
+  padding: 1rem;
+  flex: 1;
+}
+
+.left-col, .right-col {
+  flex: 1 1 420px;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* Kart yapısı */
+.card {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 16px;
+  padding: 1rem;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  transition: transform 0.2s, background 0.3s;
+}
+.card:hover {
+  transform: scale(1.02);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.card h3, .card h4 {
+  margin-bottom: 0.5rem;
+  color: #00bfff;
+}
+
+/* Saat */
+.digital-time {
+  font-size: 2.6rem;
+  font-weight: bold;
+  text-align: center;
+}
+.digital-date {
+  text-align: center;
+  opacity: 0.8;
+}
+.analog-wrap {
+  display: flex;
+  justify-content: center;
+  margin-top: 0.5rem;
+}
+
+/* Dünya Saatleri */
+.world-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 0.4rem;
+  font-size: 0.95rem;
+}
+
+/* Araçlar */
+.tools-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+.tool {
+  background: rgba(255, 255, 255, 0.03);
+  padding: 0.8rem;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.tool h4 {
+  margin-bottom: 0.5rem;
+  color: #00bfff;
+}
+
+.big {
+  font-size: 1.8rem;
+  margin: 0.4rem 0;
+}
+
+.btn-row {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.btn {
+  background: linear-gradient(135deg, #007bff, #00bfff);
+  border: none;
+  color: white;
+  padding: 0.4rem 0.8rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+.btn:hover { transform: scale(1.05); }
+.btn.neutral { background: rgba(255, 255, 255, 0.2); }
+.btn.danger { background: #ff4f4f; }
+
+input, select, textarea {
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  padding: 0.4rem;
+  border-radius: 6px;
+  width: 100%;
+}
+textarea {
+  min-height: 70px;
+  resize: vertical;
+}
+
+/* Mini takvim */
+#miniCalendar {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  text-align: center;
+  gap: 0.2rem;
+  margin-top: 0.3rem;
+}
+#miniCalendar div {
+  padding: 0.3rem;
+  border-radius: 4px;
+  cursor: pointer;
+}
+#miniCalendar div:hover {
+  background: rgba(255,255,255,0.1);
+}
+#miniCalendar .today {
+  background: #00bfff;
+  color: #000;
+  font-weight: bold;
+}
+
+/* Reklam alanı */
+.ads-footer {
+  text-align: center;
+  margin: 1rem auto;
+}
 
 /* Footer */
-.site-footer{margin-top:auto;padding:18px;text-align:center;color:var(--muted);font-size:13px}
-
-/* Mobile */
-@media (max-width:800px){
-  .tools-grid{grid-template-columns:1fr}
-  .clock{font-size:42px}
-  .brand{font-size:18px}
+footer.site-footer {
+  background: rgba(255, 255, 255, 0.05);
+  padding: 1rem;
+  text-align: center;
+  font-size: 0.9rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+footer a {
+  color: #00bfff;
+  text-decoration: none;
 }
 
-/* Temalar */
-body.space{background:radial-gradient(circle at 20% 20%, #020024, #0f1b3b)}
-body.gradient{background:linear-gradient(135deg,#667eea,#764ba2)}
-body.wave{background:linear-gradient(135deg,#43cea2,#185a9d)}
-body.stars{background:radial-gradient(circle at 10% 10%, #0b1220,#203a43,#2c5364)}
-body.light{background:#f7fafc;color:#0b1220}
-body.dark{background:#0b1220;color:#e6eef8}
+/* Renk temaları */
+body.theme-space {
+  background: radial-gradient(circle at top, #0d1b3b, #050a1b);
+}
+body.theme-gradient {
+  background: linear-gradient(120deg, #0066ff, #00ccff);
+}
+body.theme-wave {
+  background: linear-gradient(135deg, #0055aa, #0088cc);
+}
+body.theme-stars {
+  background: #0b0b1f url('stars-bg.png') repeat;
+}
+body.theme-light {
+  background: #f9f9f9;
+  color: #111;
+}
+body.theme-dark {
+  background: #111;
+  color: #f9f9f9;
+}
+
+/* Mobil uyum */
+@media (max-width: 768px) {
+  .tools-grid {
+    grid-template-columns: 1fr;
+  }
+  .nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .digital-time {
+    font-size: 2.1rem;
+  }
+}
