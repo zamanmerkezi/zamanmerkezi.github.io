@@ -6,79 +6,122 @@
   <meta name="google-adsense-account" content="ca-pub-3214692314578267" />
   <title>ZAMAN MERKEZİ ⏰</title>
 
-  <!-- ✅ AdSense -->
+  <!-- AdSense (client ID senin) -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3214692314578267" crossorigin="anonymous"></script>
 
-  <!-- ✅ PWA -->
+  <!-- PWA manifest (varsa) -->
   <link rel="manifest" href="manifest.json" />
-  <meta name="theme-color" content="#111111" />
+  <meta name="theme-color" content="#0b1220" />
 
+  <!-- Stil -->
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div class="container">
-    <h1>🕒 ZAMAN MERKEZİ</h1>
-    <h2 id="clock"></h2>
-    <p id="date"></p>
+  <header class="site-header">
+    <div class="header-inner">
+      <h1 class="brand">🕒 ZAMAN MERKEZİ</h1>
+      <nav class="top-nav">
+        <a href="index.html">Ana Sayfa</a>
+        <a href="hakkinda.html">Hakkında</a>
+        <a href="gizlilik.html">Gizlilik</a>
+        <a href="iletisim.html">İletişim</a>
+      </nav>
+    </div>
+  </header>
 
-    <hr />
+  <main class="container">
+    <section class="panel clock-panel">
+      <div class="meta">
+        <div id="clock" class="clock">00:00:00</div>
+        <div id="date" class="date">—</div>
+      </div>
 
-    <h2>🌍 Dünya Saatleri</h2>
-    <div id="worldTimes"></div>
+      <div class="controls">
+        <div class="theme-tools">
+          <label>Tema:</label>
+          <select id="themeSelect" aria-label="Tema seçimi">
+            <option value="auto">Otomatik</option>
+            <option value="space">Uzay</option>
+            <option value="gradient">Degrade</option>
+            <option value="wave">Mavi Dalga</option>
+            <option value="stars">Yıldızlı</option>
+            <option value="light">Açık</option>
+            <option value="dark">Koyu</option>
+          </select>
+        </div>
+      </div>
+    </section>
 
-    <hr />
+    <section class="panel world-panel" aria-live="polite">
+      <h2>🌍 Dünya Saatleri</h2>
+      <div id="worldTimes" class="world-list">Yükleniyor…</div>
+    </section>
 
-    <h2>⏱ Kronometre</h2>
-    <div id="timer">00:00</div>
-    <button onclick="start()">Başlat</button>
-    <button onclick="stop()">Durdur</button>
-    <button onclick="reset()">Sıfırla</button>
+    <section class="panel tools-grid">
+      <div class="tool">
+        <h3>⏱ Kronometre</h3>
+        <div id="timer" class="big">00:00</div>
+        <div class="btn-row">
+          <button id="sw-start">Başlat</button>
+          <button id="sw-stop">Durdur</button>
+          <button id="sw-reset">Sıfırla</button>
+        </div>
+      </div>
 
-    <hr />
+      <div class="tool">
+        <h3>⏳ Geri Sayım</h3>
+        <input id="countdownInput" type="number" placeholder="Süre (saniye)" min="1" />
+        <div class="btn-row">
+          <button id="cd-start">Başlat</button>
+          <button id="cd-stop">Durdur</button>
+        </div>
+        <div id="countdownDisplay" class="big">00</div>
+      </div>
 
-    <h2>⏳ Geri Sayım</h2>
-    <input type="number" id="countdownInput" placeholder="Süre (saniye)" />
-    <button onclick="startCountdown()">Başlat</button>
-    <div id="countdownDisplay"></div>
+      <div class="tool">
+        <h3>🔔 Alarm</h3>
+        <input id="alarmTime" type="time" />
+        <div class="btn-row">
+          <button id="alarm-set">Kur</button>
+          <button id="alarm-clear">Kapat</button>
+        </div>
+        <p id="alarmStatus" class="muted">Alarm yok</p>
+      </div>
 
-    <hr />
+      <div class="tool">
+        <h3>🔗 Kısalar & Paylaş</h3>
+        <p class="muted">Aktif kısayollar yakında — şimdilik tarayıcı paylaşımı kullanılabilir.</p>
+        <button id="shareBtn">Sayfayı Paylaş</button>
+      </div>
+    </section>
 
-    <h2>🔔 Alarm</h2>
-    <input type="time" id="alarmTime" />
-    <button onclick="setAlarm()">Kur</button>
-    <p id="alarmStatus"></p>
+    <!-- AdSense responsive block (tek ad birimi, yerleşim uygun) -->
+    <div class="ads-wrapper">
+      <ins class="adsbygoogle"
+           style="display:block"
+           data-ad-client="ca-pub-3214692314578267"
+           data-ad-slot="1234567890"
+           data-ad-format="auto"
+           data-full-width-responsive="true"></ins>
+      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    </div>
+  </main>
 
-    <hr />
+  <footer class="site-footer">
+    <div>© <span id="year"></span> Zaman Merkezi — Tüm hakları saklıdır.</div>
+  </footer>
 
-    <h2>🎨 Tema Seç</h2>
-    <button onclick="setTheme('space')">Uzay</button>
-    <button onclick="setTheme('gradient')">Degrade</button>
-    <button onclick="setTheme('wave')">Mavi Dalga</button>
-    <button onclick="setTheme('stars')">Yıldızlı</button>
-    <button onclick="setTheme('light')">Açık</button>
-    <button onclick="setTheme('dark')">Koyu</button>
-
-    <hr />
-
-    <p>
-      <a href="hakkinda.html">ℹ️ Hakkında</a> |
-      <a href="gizlilik.html">🔒 Gizlilik</a> |
-      <a href="iletisim.html">✉️ İletişim</a>
-    </p>
-
-    <ins class="adsbygoogle"
-      style="display:block"
-      data-ad-client="ca-pub-3214692314578267"
-      data-ad-slot="1234567890"
-      data-ad-format="auto"
-      data-full-width-responsive="true"></ins>
-    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
-  </div>
-
+  <!-- Script -->
   <script src="script.js"></script>
+
+  <!-- Service Worker register (varsa service-worker.js) -->
   <script>
-    if ("serviceWorker" in navigator) {
-      navigator.serviceWorker.register("service-worker.js");
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/service-worker.js')
+          .then(reg => console.log('ServiceWorker kayıt başarılı:', reg.scope))
+          .catch(err => console.warn('ServiceWorker kayıt hatası:', err));
+      });
     }
   </script>
 </body>
