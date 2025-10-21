@@ -9,11 +9,18 @@
   <!-- ✅ Google AdSense -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3214692314578267" crossorigin="anonymous"></script>
 
+  <!-- ✅ PWA Manifest -->
+  <link rel="manifest" href="manifest.json">
+
+  <!-- ✅ Uygulama ikonları -->
+  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+  <link rel="apple-touch-icon" href="icons/icon-512.png">
+
+  <!-- ✅ Renk teması (tarayıcı çubuğu rengi) -->
+  <meta name="theme-color" content="#111111" />
+
   <!-- ✅ Stil dosyası -->
   <link rel="stylesheet" href="style.css">
-
-  <!-- ✅ Manifest (PWA) -->
-  <link rel="manifest" href="manifest.json">
 </head>
 <body>
   <h1>🕒 ZAMAN MERKEZİ</h1>
@@ -94,7 +101,9 @@
   <!-- ✅ Service Worker Kaydı -->
   <script>
     if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('service-worker.js');
+      navigator.serviceWorker.register('service-worker.js')
+        .then(() => console.log("✅ Service Worker kaydedildi"))
+        .catch(err => console.error("❌ SW hatası:", err));
     }
   </script>
 </body>
