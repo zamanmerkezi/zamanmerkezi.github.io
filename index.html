@@ -3,86 +3,41 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-  <!-- ✅ GEREKLİ META ETİKETİ (eklenmiş) -->
-  <meta name="google-adsense-account" content="ca-pub-3214692314578267">
-
+  <meta name="google-adsense-account" content="ca-pub-3214692314578267" />
   <title>ZAMAN MERKEZİ ⏰</title>
 
-  <!-- ✅ Google AdSense Otomatik Reklam Scripti -->
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3214692314578267"
-          crossorigin="anonymous"></script>
+  <!-- ✅ Google AdSense -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3214692314578267" crossorigin="anonymous"></script>
 
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: url('https://cdn.pixabay.com/photo/2017/09/13/08/53/space-2742113_1280.jpg') no-repeat center center/cover;
-      color: white;
-      text-align: center;
-      margin: 0;
-      padding: 0;
-    }
+  <!-- ✅ Stil dosyası -->
+  <link rel="stylesheet" href="style.css">
 
-    h1 {
-      margin-top: 40px;
-      font-size: 2.2em;
-      font-weight: bold;
-    }
-
-    .container {
-      margin-top: 20px;
-    }
-
-    .clock, .stopwatch {
-      background: rgba(0, 0, 0, 0.5);
-      border-radius: 12px;
-      padding: 20px;
-      margin: 15px auto;
-      width: 300px;
-      box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
-    }
-
-    button {
-      padding: 8px 15px;
-      margin: 5px;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      background: #444;
-      color: white;
-      transition: 0.3s;
-    }
-
-    button:hover {
-      background: #666;
-    }
-
-    /* Ekstra güvenlik için reklam alanları düzgün hizalansın */
-    ins.adsbygoogle {
-      display: block;
-      margin: 20px auto;
-      text-align: center;
-    }
-  </style>
+  <!-- ✅ Manifest (PWA) -->
+  <link rel="manifest" href="manifest.json">
 </head>
 <body>
   <h1>🕒 ZAMAN MERKEZİ</h1>
 
-  <!-- ✅ Üst Reklam Alanı -->
+  <!-- Üst reklam -->
   <ins class="adsbygoogle"
-       style="display:block; margin: 20px auto; text-align:center;"
+       style="display:block; margin:20px auto; text-align:center;"
        data-ad-client="ca-pub-3214692314578267"
        data-ad-slot="4025584530"
        data-ad-format="auto"
        data-full-width-responsive="true"></ins>
-  <script>
-      (adsbygoogle = window.adsbygoogle || []).push({});
-  </script>
+  <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
 
   <div class="container">
-    <!-- Saat ve Tarih -->
+
+    <!-- Dünya Saatleri -->
+    <div class="world-clocks">
+      <h2>🌍 Dünya Saatleri</h2>
+      <div id="worldTimes"></div>
+    </div>
+
+    <!-- Ana Saat -->
     <div class="clock">
-      <h2>🕓 Saat ve Tarih</h2>
+      <h2>⏰ Şu Anki Saat</h2>
       <h1 id="clock">00:00:00</h1>
       <p id="date"></p>
     </div>
@@ -96,9 +51,36 @@
       <button onclick="reset()">Sıfırla</button>
     </div>
 
-    <!-- ✅ Alt Reklam Alanı -->
+    <!-- Geri Sayım -->
+    <div class="countdown">
+      <h2>⏳ Geri Sayım</h2>
+      <input type="number" id="countdownInput" placeholder="Süre (sn)" />
+      <button onclick="startCountdown()">Başlat</button>
+      <h1 id="countdownDisplay">00</h1>
+    </div>
+
+    <!-- Alarm -->
+    <div class="alarm">
+      <h2>🔔 Alarm Kur</h2>
+      <input type="time" id="alarmTime">
+      <button onclick="setAlarm()">Kur</button>
+      <p id="alarmStatus">Alarm bekleniyor...</p>
+    </div>
+
+    <!-- Tema Geçişi -->
+    <div class="themes">
+      <h2>🎨 Tema Seç</h2>
+      <button onclick="setTheme('space')">Uzay</button>
+      <button onclick="setTheme('gradient')">Renkli</button>
+      <button onclick="setTheme('wave')">Dalga</button>
+      <button onclick="setTheme('stars')">Yıldızlı</button>
+      <button onclick="setTheme('light')">Açık</button>
+      <button onclick="setTheme('dark')">Koyu</button>
+    </div>
+
+    <!-- Alt reklam -->
     <ins class="adsbygoogle"
-         style="display:block; margin: 20px auto; text-align:center;"
+         style="display:block; margin:20px auto; text-align:center;"
          data-ad-client="ca-pub-3214692314578267"
          data-ad-slot="8753498736"
          data-ad-format="auto"
@@ -106,32 +88,14 @@
     <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
   </div>
 
-  <script>
-    // Saat ve tarih
-    function updateClock() {
-      const now = new Date();
-      document.getElementById("clock").textContent = now.toLocaleTimeString("tr-TR");
-      document.getElementById("date").textContent = now.toLocaleDateString("tr-TR", { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
-    }
-    setInterval(updateClock, 1000);
-    updateClock();
+  <!-- ✅ Ana script -->
+  <script src="script.js"></script>
 
-    // Kronometre
-    let timer, seconds = 0;
-    function start() {
-      if (!timer) {
-        timer = setInterval(() => {
-          seconds++;
-          const min = Math.floor(seconds / 60);
-          const sec = seconds % 60;
-          document.getElementById("timer").textContent =
-            `${min.toString().padStart(2, '0')}:${sec.toString().padStart(2, '0')}`;
-        }, 1000);
-      }
+  <!-- ✅ Service Worker Kaydı -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('service-worker.js');
     }
-    function stop() { clearInterval(timer); timer = null; }
-    function reset() { stop(); seconds = 0; document.getElementById("timer").textContent = "00:00"; }
   </script>
 </body>
 </html>
-<!-- rebuild -->
