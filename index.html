@@ -1,26 +1,41 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="google-adsense-account" content="ca-pub-3214692314578267" />
-  <title>ZAMAN MERKEZİ ⏰</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>ZAMAN MERKEZİ ⏰ — v2.0</title>
 
-  <!-- AdSense (client ID senin) -->
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3214692314578267" crossorigin="anonymous"></script>
+  <!-- AdSense (senin pub) -->
+  <meta name="google-adsense-account" content="ca-pub-3214692314578267">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3214692314578267"
+    crossorigin="anonymous"></script>
 
-  <!-- PWA manifest (varsa) -->
-  <link rel="manifest" href="manifest.json" />
-  <meta name="theme-color" content="#0b1220" />
+  <!-- PWA -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#0b1220">
+
+  <!-- Icons (yükle: icons/icon-192.png, icons/icon-512.png) -->
+  <link rel="icon" href="icons/icon-192.png" sizes="192x192" type="image/png">
+  <link rel="apple-touch-icon" href="icons/icon-512.png">
 
   <!-- Stil -->
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="style.css">
+
+  <!-- License / author meta (opsiyonel) -->
+  <meta name="description" content="Zaman Merkezi — dijital & analog saat, dünya saatleri, kronometre, geri sayım, alarm, takvim, not ve hava durumu.">
 </head>
 <body>
   <header class="site-header">
     <div class="header-inner">
-      <h1 class="brand">🕒 ZAMAN MERKEZİ</h1>
-      <nav class="top-nav">
+      <div class="brand">
+        <img src="icons/icon-192.png" alt="Zaman Merkezi" class="logo">
+        <div>
+          <h1>ZAMAN MERKEZİ</h1>
+          <p class="tag">Hızlı • PWA • Reklam uyumlu</p>
+        </div>
+      </div>
+
+      <nav class="nav">
         <a href="index.html">Ana Sayfa</a>
         <a href="hakkinda.html">Hakkında</a>
         <a href="gizlilik.html">Gizlilik</a>
@@ -29,98 +44,155 @@
     </div>
   </header>
 
-  <main class="container">
-    <section class="panel clock-panel">
-      <div class="meta">
-        <div id="clock" class="clock">00:00:00</div>
-        <div id="date" class="date">—</div>
-      </div>
+  <main class="layout">
+    <!-- Sol kolon: Saatler ve ana kontroller -->
+    <section class="left-col">
+      <article class="card clock-card">
+        <div class="clock-header">
+          <div class="digital">
+            <div id="clock" class="digital-time">00:00:00</div>
+            <div id="date" class="digital-date">—</div>
+          </div>
+          <div class="analog-wrap">
+            <canvas id="analogClock" width="160" height="160" aria-hidden="true"></canvas>
+          </div>
+        </div>
 
-      <div class="controls">
-        <div class="theme-tools">
-          <label>Tema:</label>
-          <select id="themeSelect" aria-label="Tema seçimi">
-            <option value="auto">Otomatik</option>
-            <option value="space">Uzay</option>
-            <option value="gradient">Degrade</option>
-            <option value="wave">Mavi Dalga</option>
-            <option value="stars">Yıldızlı</option>
-            <option value="light">Açık</option>
-            <option value="dark">Koyu</option>
+        <div class="clock-actions">
+          <label for="timezoneSelect">Konum:</label>
+          <select id="timezoneSelect" aria-label="Saat dilimi">
+            <option value="local">Cihaz Saati</option>
+            <option value="Europe/Istanbul">İstanbul</option>
+            <option value="Europe/London">Londra</option>
+            <option value="America/New_York">New York</option>
+            <option value="Asia/Tokyo">Tokyo</option>
           </select>
+
+          <div class="theme-row">
+            <label for="themeSelect">Tema:</label>
+            <select id="themeSelect" aria-label="Tema seçimi">
+              <option value="auto">Otomatik</option>
+              <option value="space">Uzay</option>
+              <option value="gradient">Degrade</option>
+              <option value="wave">Mavi Dalga</option>
+              <option value="stars">Yıldızlı</option>
+              <option value="light">Açık</option>
+              <option value="dark">Koyu</option>
+            </select>
+          </div>
         </div>
-      </div>
+      </article>
+
+      <article class="card world-card">
+        <h3>🌍 Dünya Saatleri</h3>
+        <div id="worldTimes" class="world-list" aria-live="polite">Yükleniyor…</div>
+      </article>
+
+      <article class="card weather-card">
+        <h3>🌤 Hava Durumu</h3>
+        <div id="weatherStatus">
+          <div class="weather-row">
+            <div id="weatherIcon">—</div>
+            <div>
+              <div id="weatherTemp">--°C</div>
+              <div id="weatherDesc">Konum izni bekleniyor</div>
+            </div>
+          </div>
+          <small class="muted">Hava durumu için açık anahtar ekleyin (opsiyonel).</small>
+        </div>
+      </article>
     </section>
 
-    <section class="panel world-panel" aria-live="polite">
-      <h2>🌍 Dünya Saatleri</h2>
-      <div id="worldTimes" class="world-list">Yükleniyor…</div>
+    <!-- Sağ kolon: Araçlar -->
+    <section class="right-col">
+
+      <article class="card tools-grid">
+        <div class="tool stopwatch">
+          <h4>⏱ Kronometre</h4>
+          <div id="timer" class="big">00:00</div>
+          <div class="btn-row">
+            <button id="sw-start" class="btn">Başlat</button>
+            <button id="sw-stop" class="btn neutral">Durdur</button>
+            <button id="sw-reset" class="btn danger">Sıfırla</button>
+          </div>
+        </div>
+
+        <div class="tool countdown">
+          <h4>⏳ Geri Sayım</h4>
+          <input id="countdownInput" type="number" min="1" placeholder="Saniye" />
+          <div class="btn-row">
+            <button id="cd-start" class="btn">Başlat</button>
+            <button id="cd-stop" class="btn neutral">Durdur</button>
+          </div>
+          <div id="countdownDisplay" class="big">00</div>
+        </div>
+
+        <div class="tool alarm">
+          <h4>🔔 Alarm</h4>
+          <input id="alarmTime" type="time" />
+          <div class="btn-row">
+            <button id="alarm-set" class="btn">Kur</button>
+            <button id="alarm-clear" class="btn neutral">Kapat</button>
+          </div>
+          <p id="alarmStatus" class="muted">Alarm yok</p>
+        </div>
+
+        <div class="tool notes">
+          <h4>🗒 Günlük Not</h4>
+          <textarea id="noteInput" placeholder="Bugün için not..."></textarea>
+          <div class="btn-row">
+            <button id="saveNote" class="btn">Kaydet</button>
+            <button id="clearNote" class="btn neutral">Sil</button>
+          </div>
+          <div id="noteSaved" class="muted">Henüz not yok</div>
+        </div>
+      </article>
+
+      <article class="card mini-panel">
+        <h4>📅 Mini Takvim</h4>
+        <div id="miniCalendar"></div>
+        <small class="muted">Tarihe tıklayın, o güne not ekleyebilirsiniz.</small>
+      </article>
+
+      <article class="card share-card">
+        <h4>🔗 Paylaş</h4>
+        <button id="shareBtn" class="btn">Sayfayı Paylaş / Linki Kopyala</button>
+        <div class="muted">Web Share API yoksa bağlantı panoya kopyalanır.</div>
+      </article>
+
     </section>
-
-    <section class="panel tools-grid">
-      <div class="tool">
-        <h3>⏱ Kronometre</h3>
-        <div id="timer" class="big">00:00</div>
-        <div class="btn-row">
-          <button id="sw-start">Başlat</button>
-          <button id="sw-stop">Durdur</button>
-          <button id="sw-reset">Sıfırla</button>
-        </div>
-      </div>
-
-      <div class="tool">
-        <h3>⏳ Geri Sayım</h3>
-        <input id="countdownInput" type="number" placeholder="Süre (saniye)" min="1" />
-        <div class="btn-row">
-          <button id="cd-start">Başlat</button>
-          <button id="cd-stop">Durdur</button>
-        </div>
-        <div id="countdownDisplay" class="big">00</div>
-      </div>
-
-      <div class="tool">
-        <h3>🔔 Alarm</h3>
-        <input id="alarmTime" type="time" />
-        <div class="btn-row">
-          <button id="alarm-set">Kur</button>
-          <button id="alarm-clear">Kapat</button>
-        </div>
-        <p id="alarmStatus" class="muted">Alarm yok</p>
-      </div>
-
-      <div class="tool">
-        <h3>🔗 Kısalar & Paylaş</h3>
-        <p class="muted">Aktif kısayollar yakında — şimdilik tarayıcı paylaşımı kullanılabilir.</p>
-        <button id="shareBtn">Sayfayı Paylaş</button>
-      </div>
-    </section>
-
-    <!-- AdSense responsive block (tek ad birimi, yerleşim uygun) -->
-    <div class="ads-wrapper">
-      <ins class="adsbygoogle"
-           style="display:block"
-           data-ad-client="ca-pub-3214692314578267"
-           data-ad-slot="1234567890"
-           data-ad-format="auto"
-           data-full-width-responsive="true"></ins>
-      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
-    </div>
   </main>
 
+  <!-- Reklam alanı (responsive) -->
+  <div class="ads-footer">
+    <ins class="adsbygoogle"
+      style="display:block"
+      data-ad-client="ca-pub-3214692314578267"
+      data-ad-slot="1234567890"
+      data-ad-format="auto"
+      data-full-width-responsive="true"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+  </div>
+
   <footer class="site-footer">
-    <div>© <span id="year"></span> Zaman Merkezi — Tüm hakları saklıdır.</div>
+    <div>© <span id="year"></span> Zaman Merkezi • Tüm hakları saklıdır</div>
+    <div class="footer-links">
+      <a href="hakkinda.html">Hakkında</a> •
+      <a href="gizlilik.html">Gizlilik</a> •
+      <a href="iletisim.html">İletişim</a>
+    </div>
   </footer>
 
-  <!-- Script -->
+  <!-- Ana script (sonraki mesajda tam) -->
   <script src="script.js"></script>
 
-  <!-- Service Worker register (varsa service-worker.js) -->
+  <!-- Service Worker kayıt (service-worker.js eklendiğinde aktif) -->
   <script>
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
         navigator.serviceWorker.register('/service-worker.js')
-          .then(reg => console.log('ServiceWorker kayıt başarılı:', reg.scope))
-          .catch(err => console.warn('ServiceWorker kayıt hatası:', err));
+          .then(reg => console.log('Service Worker kayıt başarılı:', reg.scope))
+          .catch(err => console.warn('Service Worker kayıt hatası:', err));
       });
     }
   </script>
