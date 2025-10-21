@@ -1,4 +1,5 @@
-// 🕒 ZAMAN MERKEZİ — Tam İşlevli Script
+// 🕒 ZAMAN MERKEZİ — Tam İşlevli Script v2.5
+// Her özellik aktif, bildirim destekli, PWA uyumlu
 
 // ======================= //
 //  🌍 Dijital + Tarih
@@ -27,6 +28,7 @@ const worldZones = {
 };
 function updateWorldTimes() {
   const list = document.getElementById("worldTimes");
+  if (!list) return;
   list.innerHTML = "";
   Object.keys(worldZones).forEach(city => {
     const time = new Date().toLocaleTimeString("tr-TR", { timeZone: worldZones[city] });
@@ -39,9 +41,9 @@ setInterval(updateWorldTimes, 1000);
 updateWorldTimes();
 
 // ======================= //
-//  ⏱ Kronometre
+//  ⏱ Kronometre (saat:dakika:saniye:milisaniye)
 // ======================= //
-let swStartTime, swInterval, swElapsed = 0, running = false;
+let swStartTime, swInterval, swElapsed = 0, swRunning = false;
 const timerEl = document.getElementById("timer");
 
 function updateStopwatch() {
@@ -53,38 +55,36 @@ function updateStopwatch() {
   timerEl.textContent = `${hr.toString().padStart(2, "0")}:${min.toString().padStart(2, "0")}:${sec.toString().padStart(2, "0")}.${ms.toString().padStart(2, "0")}`;
 }
 
-document.getElementById("sw-start").onclick = () => {
-  if (!running) {
+document.getElementById("sw-start")?.addEventListener("click", () => {
+  if (!swRunning) {
     swStartTime = Date.now();
     swInterval = setInterval(updateStopwatch, 10);
-    running = true;
+    swRunning = true;
   }
-};
-
-document.getElementById("sw-stop").onclick = () => {
-  if (running) {
+});
+document.getElementById("sw-stop")?.addEventListener("click", () => {
+  if (swRunning) {
     clearInterval(swInterval);
     swElapsed += Date.now() - swStartTime;
-    running = false;
+    swRunning = false;
   }
-};
-
-document.getElementById("sw-reset").onclick = () => {
+});
+document.getElementById("sw-reset")?.addEventListener("click", () => {
   clearInterval(swInterval);
-  running = false;
+  swRunning = false;
   swElapsed = 0;
   timerEl.textContent = "00:00:00.00";
-};
+});
 
 // ======================= //
-//  ⏳ Geri Sayım
+//  ⏳ Geri Sayım (Başlat - Durdur - Sıfırla)
 // ======================= //
 let cdInterval, cdRemaining = 0;
 const cdDisplay = document.getElementById("countdownDisplay");
 
-document.getElementById("cd-start").onclick = () => {
-  const input = document.getElementById("countdownInput").value;
-  if (!input || input <= 0) return alert("Lütfen geçerli bir süre girin (saniye)");
+document.getElementById("cd-start")?.addEventListener("click", () => {
+  const input = parseInt(document.getElementById("countdownInput").value);
+  if (!input || input <= 0) return alert("Lütfen geçerli bir süre (saniye) girin.");
   cdRemaining = input;
   cdDisplay.textContent = cdRemaining;
   clearInterval(cdInterval);
@@ -98,38 +98,36 @@ document.getElementById("cd-start").onclick = () => {
       playBeep();
     }
   }, 1000);
-};
-
-document.getElementById("cd-stop").onclick = () => clearInterval(cdInterval);
-document.getElementById("sw-reset")?.addEventListener("click", () => {
-  cdDisplay.textContent = "00";
+});
+document.getElementById("cd-stop")?.addEventListener("click", () => clearInterval(cdInterval));
+document.getElementById("cd-reset")?.addEventListener("click", () => {
   clearInterval(cdInterval);
+  cdRemaining = 0;
+  cdDisplay.textContent = "00";
 });
 
 // ======================= //
-//  🔔 Alarm
+//  ⏰ Alarm
 // ======================= //
 let alarmTime = null, alarmTimeout;
-
-document.getElementById("alarm-set").onclick = () => {
+document.getElementById("alarm-set")?.addEventListener("click", () => {
   const time = document.getElementById("alarmTime").value;
   if (!time) return alert("Lütfen saat seçin ⏰");
   alarmTime = time;
   document.getElementById("alarmStatus").textContent = `Alarm kuruldu: ${alarmTime}`;
   checkAlarm();
-};
-
-document.getElementById("alarm-clear").onclick = () => {
+});
+document.getElementById("alarm-clear")?.addEventListener("click", () => {
   alarmTime = null;
   clearTimeout(alarmTimeout);
   document.getElementById("alarmStatus").textContent = "Alarm kapatıldı";
-};
+});
 
 function checkAlarm() {
   if (!alarmTime) return;
   const [h, m] = alarmTime.split(":").map(Number);
   const now = new Date();
-  if (now.getHours() === h && now.getMinutes() === m) {
+  if (now.getHours() === h && now.getMinutes() === m && now.getSeconds() === 0) {
     showNotification("⏰ Alarm!", "Belirlediğin saate ulaşıldı.");
     playBeep();
     alarmTime = null;
@@ -143,18 +141,16 @@ function checkAlarm() {
 const noteInput = document.getElementById("noteInput");
 const noteSaved = document.getElementById("noteSaved");
 
-document.getElementById("saveNote").onclick = () => {
+document.getElementById("saveNote")?.addEventListener("click", () => {
   const val = noteInput.value.trim();
   localStorage.setItem("zamanmerkezi_note", val);
   noteSaved.textContent = "✅ Not kaydedildi!";
-};
-
-document.getElementById("clearNote").onclick = () => {
+});
+document.getElementById("clearNote")?.addEventListener("click", () => {
   localStorage.removeItem("zamanmerkezi_note");
   noteInput.value = "";
   noteSaved.textContent = "🗑 Not silindi!";
-};
-
+});
 window.addEventListener("load", () => {
   const saved = localStorage.getItem("zamanmerkezi_note");
   if (saved) noteInput.value = saved;
@@ -165,11 +161,13 @@ window.addEventListener("load", () => {
 // ======================= //
 const cal = document.getElementById("miniCalendar");
 function renderCalendar() {
+  if (!cal) return;
   const now = new Date();
   const month = now.toLocaleString("tr-TR", { month: "long" });
   const year = now.getFullYear();
+  const daysInMonth = new Date(year, now.getMonth() + 1, 0).getDate();
   let html = `<h5>${month} ${year}</h5><div class="days">`;
-  for (let d = 1; d <= 30; d++) html += `<span>${d}</span>`;
+  for (let d = 1; d <= daysInMonth; d++) html += `<span>${d}</span>`;
   html += "</div>";
   cal.innerHTML = html;
 }
@@ -179,13 +177,18 @@ renderCalendar();
 //  🔔 Bildirim & Ses
 // ======================= //
 function showNotification(title, body) {
-  if (Notification.permission === "granted") {
-    navigator.serviceWorker.getRegistration().then((reg) => {
-      if (reg) reg.showNotification(title, { body, icon: "icon-192.png" });
-    });
-  } else if (Notification.permission !== "denied") {
-    Notification.requestPermission().then((perm) => {
-      if (perm === "granted") showNotification(title, body);
+  if ('Notification' in window && navigator.serviceWorker) {
+    Notification.requestPermission().then(permission => {
+      if (permission === "granted") {
+        navigator.serviceWorker.ready.then(reg => {
+          reg.showNotification(title, {
+            body,
+            icon: "icon-192.png",
+            badge: "icon-192.png",
+            vibrate: [200, 100, 200],
+          });
+        });
+      }
     });
   }
 }
@@ -196,9 +199,9 @@ function playBeep() {
 }
 
 // ======================= //
-//  🔄 Tema & yıl
+//  🌙 Tema & Yıl
 // ======================= //
 document.getElementById("year").textContent = new Date().getFullYear();
-document.getElementById("themeSelect")?.addEventListener("change", (e) => {
+document.getElementById("themeSelect")?.addEventListener("change", e => {
   document.body.setAttribute("data-theme", e.target.value);
 });
