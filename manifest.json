@@ -1,19 +1,20 @@
 {
-  "name": "ZAMAN MERKEZİ",
-  "short_name": "ZamanMerkezi",
-  "description": "Saat, kronometre, geri sayım, dünya saatleri",
-  "start_url": "/index.html",
+  "name": "ZAMAN MERKEZİ ⏰",
+  "short_name": "ZAMAN",
+  "description": "Saat, kronometre, geri sayım, alarm, not defteri ve hava durumu — hepsi bir arada!",
+  "start_url": "index.html",
   "display": "standalone",
-  "background_color": "#0099cc",
-  "theme_color": "#0099cc",
+  "background_color": "#0b1220",
+  "theme_color": "#00bfff",
+  "orientation": "portrait",
   "icons": [
     {
-      "src": "/icons/icon-192.png",
+      "src": "icons/icon-192.png",
       "sizes": "192x192",
       "type": "image/png"
     },
     {
-      "src": "/icons/icon-512.png",
+      "src": "icons/icon-512.png",
       "sizes": "512x512",
       "type": "image/png"
     }
