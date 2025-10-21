@@ -5,30 +5,30 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>ZAMAN MERKEZİ ⏰ — v2.0</title>
 
-  <!-- AdSense (senin pub) -->
+  <!-- ✅ Google AdSense -->
   <meta name="google-adsense-account" content="ca-pub-3214692314578267">
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3214692314578267"
     crossorigin="anonymous"></script>
 
-  <!-- PWA -->
+  <!-- ✅ PWA -->
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#0b1220">
 
-  <!-- Icons (yükle: icons/icon-192.png, icons/icon-512.png) -->
-  <link rel="icon" href="icons/icon-192.png" sizes="192x192" type="image/png">
-  <link rel="apple-touch-icon" href="icons/icon-512.png">
+  <!-- ✅ ICONS (kök dizinde) -->
+  <link rel="icon" href="icon-192.png" sizes="192x192" type="image/png">
+  <link rel="apple-touch-icon" href="icon-512.png">
 
-  <!-- Stil -->
+  <!-- ✅ CSS -->
   <link rel="stylesheet" href="style.css">
 
-  <!-- License / author meta (opsiyonel) -->
+  <!-- Meta -->
   <meta name="description" content="Zaman Merkezi — dijital & analog saat, dünya saatleri, kronometre, geri sayım, alarm, takvim, not ve hava durumu.">
 </head>
 <body>
   <header class="site-header">
     <div class="header-inner">
       <div class="brand">
-        <img src="icons/icon-192.png" alt="Zaman Merkezi" class="logo">
+        <img src="icon-192.png" alt="Zaman Merkezi" class="logo">
         <div>
           <h1>ZAMAN MERKEZİ</h1>
           <p class="tag">Hızlı • PWA • Reklam uyumlu</p>
@@ -45,7 +45,6 @@
   </header>
 
   <main class="layout">
-    <!-- Sol kolon: Saatler ve ana kontroller -->
     <section class="left-col">
       <article class="card clock-card">
         <div class="clock-header">
@@ -103,9 +102,7 @@
       </article>
     </section>
 
-    <!-- Sağ kolon: Araçlar -->
     <section class="right-col">
-
       <article class="card tools-grid">
         <div class="tool stopwatch">
           <h4>⏱ Kronometre</h4>
@@ -159,11 +156,10 @@
         <button id="shareBtn" class="btn">Sayfayı Paylaş / Linki Kopyala</button>
         <div class="muted">Web Share API yoksa bağlantı panoya kopyalanır.</div>
       </article>
-
     </section>
   </main>
 
-  <!-- Reklam alanı (responsive) -->
+  <!-- ✅ Reklam alanı -->
   <div class="ads-footer">
     <ins class="adsbygoogle"
       style="display:block"
@@ -183,10 +179,9 @@
     </div>
   </footer>
 
-  <!-- Ana script (sonraki mesajda tam) -->
+  <!-- ✅ Scriptler -->
   <script src="script.js"></script>
 
-  <!-- Service Worker kayıt (service-worker.js eklendiğinde aktif) -->
   <script>
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
