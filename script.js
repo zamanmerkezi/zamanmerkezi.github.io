@@ -1,169 +1,204 @@
-/* 🕒 ZAMAN MERKEZİ v2.0 - Ana JavaScript */
+// 🕒 ZAMAN MERKEZİ — Tam İşlevli Script
 
-// =============== SAAT & TARİH ===============
+// ======================= //
+//  🌍 Dijital + Tarih
+// ======================= //
 function updateClock() {
   const now = new Date();
-  document.getElementById("digitalClock").textContent = now.toLocaleTimeString("tr-TR");
-  document.getElementById("digitalDate").textContent = now.toLocaleDateString("tr-TR", {
+  document.getElementById("clock").textContent = now.toLocaleTimeString("tr-TR");
+  document.getElementById("date").textContent = now.toLocaleDateString("tr-TR", {
     weekday: "long",
-    year: "numeric",
+    day: "numeric",
     month: "long",
-    day: "numeric"
+    year: "numeric",
   });
 }
 setInterval(updateClock, 1000);
 updateClock();
 
-// =============== DÜNYA SAATLERİ ===============
-const worldCities = {
+// ======================= //
+//  🌍 Dünya Saatleri
+// ======================= //
+const worldZones = {
+  "İstanbul": "Europe/Istanbul",
   "Londra": "Europe/London",
   "New York": "America/New_York",
-  "Tokyo": "Asia/Tokyo",
-  "Sydney": "Australia/Sydney",
-  "İstanbul": "Europe/Istanbul"
+  "Tokyo": "Asia/Tokyo"
 };
 function updateWorldTimes() {
-  const container = document.getElementById("worldTimes");
-  container.innerHTML = "";
-  for (let city in worldCities) {
-    const time = new Date().toLocaleTimeString("tr-TR", { timeZone: worldCities[city] });
-    const div = document.createElement("div");
-    div.textContent = `${city}: ${time}`;
-    container.appendChild(div);
-  }
+  const list = document.getElementById("worldTimes");
+  list.innerHTML = "";
+  Object.keys(worldZones).forEach(city => {
+    const time = new Date().toLocaleTimeString("tr-TR", { timeZone: worldZones[city] });
+    const p = document.createElement("p");
+    p.textContent = `${city}: ${time}`;
+    list.appendChild(p);
+  });
 }
 setInterval(updateWorldTimes, 1000);
 updateWorldTimes();
 
-// =============== KRONOMETRE ===============
-let timerInterval;
-let timerSeconds = 0;
+// ======================= //
+//  ⏱ Kronometre
+// ======================= //
+let swStartTime, swInterval, swElapsed = 0, running = false;
+const timerEl = document.getElementById("timer");
 
-function formatTime(sec) {
-  const m = Math.floor(sec / 60);
-  const s = sec % 60;
-  return `${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`;
+function updateStopwatch() {
+  const diff = Date.now() - swStartTime + swElapsed;
+  const ms = Math.floor((diff % 1000) / 10);
+  const sec = Math.floor((diff / 1000) % 60);
+  const min = Math.floor((diff / (1000 * 60)) % 60);
+  const hr = Math.floor(diff / (1000 * 60 * 60));
+  timerEl.textContent = `${hr.toString().padStart(2, "0")}:${min.toString().padStart(2, "0")}:${sec.toString().padStart(2, "0")}.${ms.toString().padStart(2, "0")}`;
 }
-function start() {
-  if (!timerInterval) {
-    timerInterval = setInterval(() => {
-      timerSeconds++;
-      document.getElementById("timer").textContent = formatTime(timerSeconds);
-    }, 1000);
+
+document.getElementById("sw-start").onclick = () => {
+  if (!running) {
+    swStartTime = Date.now();
+    swInterval = setInterval(updateStopwatch, 10);
+    running = true;
   }
-}
-function stop() {
-  clearInterval(timerInterval);
-  timerInterval = null;
-}
-function reset() {
-  stop();
-  timerSeconds = 0;
-  document.getElementById("timer").textContent = "00:00";
-}
+};
 
-// =============== GERİ SAYIM ===============
-let countdownInterval;
-function startCountdown() {
-  let duration = parseInt(document.getElementById("countdownInput").value);
-  const display = document.getElementById("countdownDisplay");
+document.getElementById("sw-stop").onclick = () => {
+  if (running) {
+    clearInterval(swInterval);
+    swElapsed += Date.now() - swStartTime;
+    running = false;
+  }
+};
 
-  clearInterval(countdownInterval);
-  countdownInterval = setInterval(() => {
-    if (duration > 0) {
-      duration--;
-      display.textContent = duration + " sn";
-    } else {
-      clearInterval(countdownInterval);
-      display.textContent = "⏰ Süre Doldu!";
-      playAlarmSound();
+document.getElementById("sw-reset").onclick = () => {
+  clearInterval(swInterval);
+  running = false;
+  swElapsed = 0;
+  timerEl.textContent = "00:00:00.00";
+};
+
+// ======================= //
+//  ⏳ Geri Sayım
+// ======================= //
+let cdInterval, cdRemaining = 0;
+const cdDisplay = document.getElementById("countdownDisplay");
+
+document.getElementById("cd-start").onclick = () => {
+  const input = document.getElementById("countdownInput").value;
+  if (!input || input <= 0) return alert("Lütfen geçerli bir süre girin (saniye)");
+  cdRemaining = input;
+  cdDisplay.textContent = cdRemaining;
+  clearInterval(cdInterval);
+  cdInterval = setInterval(() => {
+    cdRemaining--;
+    cdDisplay.textContent = cdRemaining;
+    if (cdRemaining <= 0) {
+      clearInterval(cdInterval);
+      cdDisplay.textContent = "00";
+      showNotification("⏳ Süre Doldu!", "Geri sayım tamamlandı.");
+      playBeep();
     }
   }, 1000);
-}
+};
 
-// =============== ALARM ===============
-let alarmTime = null;
-function setAlarm() {
-  const time = document.getElementById("alarmTime").value;
-  if (time) {
-    alarmTime = time;
-    document.getElementById("alarmStatus").textContent = "🔔 Alarm kuruldu: " + time;
-  }
-}
-setInterval(() => {
-  const now = new Date();
-  const currentTime = now.toTimeString().slice(0, 5);
-  if (alarmTime === currentTime) {
-    playAlarmSound();
-    alert("🔔 Alarm çalıyor!");
-    alarmTime = null;
-  }
-}, 1000);
-
-function playAlarmSound() {
-  const sound = new Audio("https://actions.google.com/sounds/v1/alarms/digital_watch_alarm_long.ogg");
-  sound.play();
-}
-
-// =============== NOT DEFTERİ ===============
-const noteArea = document.getElementById("notes");
-noteArea.value = localStorage.getItem("zamanNotlar") || "";
-noteArea.addEventListener("input", () => {
-  localStorage.setItem("zamanNotlar", noteArea.value);
+document.getElementById("cd-stop").onclick = () => clearInterval(cdInterval);
+document.getElementById("sw-reset")?.addEventListener("click", () => {
+  cdDisplay.textContent = "00";
+  clearInterval(cdInterval);
 });
 
-// =============== TAKVİM ===============
-function loadCalendar() {
+// ======================= //
+//  🔔 Alarm
+// ======================= //
+let alarmTime = null, alarmTimeout;
+
+document.getElementById("alarm-set").onclick = () => {
+  const time = document.getElementById("alarmTime").value;
+  if (!time) return alert("Lütfen saat seçin ⏰");
+  alarmTime = time;
+  document.getElementById("alarmStatus").textContent = `Alarm kuruldu: ${alarmTime}`;
+  checkAlarm();
+};
+
+document.getElementById("alarm-clear").onclick = () => {
+  alarmTime = null;
+  clearTimeout(alarmTimeout);
+  document.getElementById("alarmStatus").textContent = "Alarm kapatıldı";
+};
+
+function checkAlarm() {
+  if (!alarmTime) return;
+  const [h, m] = alarmTime.split(":").map(Number);
   const now = new Date();
-  const monthDays = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
-  const today = now.getDate();
-  const cal = document.getElementById("miniCalendar");
-  cal.innerHTML = "";
-  for (let d = 1; d <= monthDays; d++) {
-    const div = document.createElement("div");
-    div.textContent = d;
-    if (d === today) div.classList.add("today");
-    cal.appendChild(div);
+  if (now.getHours() === h && now.getMinutes() === m) {
+    showNotification("⏰ Alarm!", "Belirlediğin saate ulaşıldı.");
+    playBeep();
+    alarmTime = null;
+  }
+  alarmTimeout = setTimeout(checkAlarm, 1000);
+}
+
+// ======================= //
+//  🗒 Not Defteri
+// ======================= //
+const noteInput = document.getElementById("noteInput");
+const noteSaved = document.getElementById("noteSaved");
+
+document.getElementById("saveNote").onclick = () => {
+  const val = noteInput.value.trim();
+  localStorage.setItem("zamanmerkezi_note", val);
+  noteSaved.textContent = "✅ Not kaydedildi!";
+};
+
+document.getElementById("clearNote").onclick = () => {
+  localStorage.removeItem("zamanmerkezi_note");
+  noteInput.value = "";
+  noteSaved.textContent = "🗑 Not silindi!";
+};
+
+window.addEventListener("load", () => {
+  const saved = localStorage.getItem("zamanmerkezi_note");
+  if (saved) noteInput.value = saved;
+});
+
+// ======================= //
+//  📅 Takvim (mini)
+// ======================= //
+const cal = document.getElementById("miniCalendar");
+function renderCalendar() {
+  const now = new Date();
+  const month = now.toLocaleString("tr-TR", { month: "long" });
+  const year = now.getFullYear();
+  let html = `<h5>${month} ${year}</h5><div class="days">`;
+  for (let d = 1; d <= 30; d++) html += `<span>${d}</span>`;
+  html += "</div>";
+  cal.innerHTML = html;
+}
+renderCalendar();
+
+// ======================= //
+//  🔔 Bildirim & Ses
+// ======================= //
+function showNotification(title, body) {
+  if (Notification.permission === "granted") {
+    navigator.serviceWorker.getRegistration().then((reg) => {
+      if (reg) reg.showNotification(title, { body, icon: "icon-192.png" });
+    });
+  } else if (Notification.permission !== "denied") {
+    Notification.requestPermission().then((perm) => {
+      if (perm === "granted") showNotification(title, body);
+    });
   }
 }
-loadCalendar();
 
-// =============== HAVA DURUMU (Open-Meteo API) ===============
-async function getWeather() {
-  try {
-    const res = await fetch("https://api.open-meteo.com/v1/forecast?latitude=41.0082&longitude=28.9784&current_weather=true");
-    const data = await res.json();
-    const w = data.current_weather;
-    document.getElementById("weather").textContent =
-      `🌡 ${w.temperature}°C, 💨 ${w.windspeed} km/s`;
-  } catch {
-    document.getElementById("weather").textContent = "⚠️ Hava bilgisi alınamadı.";
-  }
+function playBeep() {
+  const audio = new Audio("https://actions.google.com/sounds/v1/alarms/alarm_clock.ogg");
+  audio.play();
 }
-getWeather();
-setInterval(getWeather, 600000); // 10 dakikada bir
 
-// =============== TEMA SİSTEMİ ===============
-function setTheme(name) {
-  document.body.className = "";
-  document.body.classList.add("theme-" + name);
-  localStorage.setItem("theme", name);
-}
-const savedTheme = localStorage.getItem("theme");
-if (savedTheme) setTheme(savedTheme);
-
-// =============== OTOMATİK GECE/GÜNDÜZ MODU ===============
-(function autoTheme() {
-  const hour = new Date().getHours();
-  if (!savedTheme) {
-    if (hour >= 7 && hour < 20) setTheme("gradient");
-    else setTheme("dark");
-  }
-})();
-
-// =============== SERVICE WORKER ===============
-if ("serviceWorker" in navigator) {
-  navigator.serviceWorker.register("service-worker.js")
-    .then(() => console.log("✅ Service Worker aktif"))
-    .catch(e => console.log("❌ SW hatası:", e));
-}
+// ======================= //
+//  🔄 Tema & yıl
+// ======================= //
+document.getElementById("year").textContent = new Date().getFullYear();
+document.getElementById("themeSelect")?.addEventListener("change", (e) => {
+  document.body.setAttribute("data-theme", e.target.value);
+});
