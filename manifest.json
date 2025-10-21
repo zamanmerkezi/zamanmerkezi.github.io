@@ -2,7 +2,7 @@
   "name": "ZAMAN MERKEZİ",
   "short_name": "ZamanMerkezi",
   "description": "Saat, kronometre, geri sayım, alarm ve dünya saatleri — hepsi tek yerde!",
-  "start_url": "./index.html",
+  "start_url": "/",
   "display": "standalone",
   "background_color": "#000000",
   "theme_color": "#111111",
