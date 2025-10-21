@@ -1,37 +1,60 @@
-body {
-  font-family: system-ui, -apple-system, Segoe UI, Roboto;
-  text-align: center;
-  background: #111;
-  color: #fff;
-  margin: 0;
-  padding: 0;
-}
-h1, h2 { margin: 10px 0; }
-.container { max-width: 800px; margin: auto; padding: 20px; }
-
-button {
-  margin: 5px;
-  padding: 8px 14px;
-  border: none;
-  border-radius: 6px;
-  background: #2563eb;
-  color: #fff;
-  cursor: pointer;
-}
-input {
-  padding: 6px;
-  border-radius: 6px;
-  border: 1px solid #555;
-  background: #1e293b;
-  color: #fff;
+/* Temel düzen ve responsive */
+:root{
+  --bg:#0b1220;
+  --card: rgba(255,255,255,0.04);
+  --muted: rgba(255,255,255,0.7);
+  --accent: #2563eb;
+  --radius:12px;
+  --gap:14px;
 }
 
-/* 🌈 Temalar */
-body.space { background: radial-gradient(circle at 30% 30%, #000428, #004e92); }
-body.gradient { background: linear-gradient(135deg, #667eea, #764ba2); }
-body.wave { background: linear-gradient(135deg, #43cea2, #185a9d); }
-body.stars { background: radial-gradient(circle at 20% 20%, #0f2027, #203a43, #2c5364); }
-body.light { background: #f1f5f9; color: #111; }
-body.dark { background: #111; color: #fff; }
+*{box-sizing:border-box}
+html,body{height:100%;margin:0;font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial}
+body{background:linear-gradient(180deg,#071022 0%, #0f172a 100%);color:#e6eef8;display:flex;flex-direction:column;min-height:100vh}
+.site-header{padding:14px 18px;background:linear-gradient(90deg, rgba(255,255,255,0.02), rgba(0,0,0,0.06));backdrop-filter: blur(4px)}
+.header-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.brand{margin:0;font-size:20px}
+.top-nav a{color:var(--muted);text-decoration:none;margin-left:12px;font-weight:500}
+.container{max-width:1100px;margin:20px auto;padding:16px;width:calc(100% - 32px)}
+.panel{background:var(--card);padding:16px;border-radius:var(--radius);margin-bottom:16px;box-shadow:0 6px 20px rgba(2,6,23,0.6)}
+.clock-panel .meta{display:flex;flex-direction:column;align-items:center;gap:8px}
+.clock{font-size:56px;font-weight:700;letter-spacing:1px}
+.date{font-size:14px;color:var(--muted)}
+.controls{display:flex;justify-content:center;margin-top:12px}
+.theme-tools label{margin-right:8px;color:var(--muted);font-size:14px}
+.theme-tools select{padding:8px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);background:transparent;color:inherit}
 
-.adsbygoogle { display: block; margin: 20px auto; text-align: center; }
+/* World list */
+.world-list{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
+.world-list > div{background:rgba(255,255,255,0.02);padding:10px 12px;border-radius:10px;min-width:140px;text-align:center;font-weight:600}
+
+/* Tools grid */
+.tools-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.tool{padding:12px;border-radius:10px;background:rgba(255,255,255,0.02)}
+.big{font-size:28px;font-weight:700;margin-top:10px}
+
+/* Buttons and inputs */
+.btn-row{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;justify-content:center}
+button{cursor:pointer;border:0;padding:8px 12px;border-radius:8px;background:var(--accent);color:white;font-weight:600;box-shadow:0 4px 12px rgba(37,99,235,0.12)}
+input[type="number"], input[type="time"]{padding:8px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);background:transparent;color:inherit;width:100%;max-width:200px}
+
+/* Ad wrapper */
+.ads-wrapper{margin-top:18px;text-align:center}
+
+/* Footer */
+.site-footer{margin-top:auto;padding:18px;text-align:center;color:var(--muted);font-size:13px}
+
+/* Mobile */
+@media (max-width:800px){
+  .tools-grid{grid-template-columns:1fr}
+  .clock{font-size:42px}
+  .brand{font-size:18px}
+}
+
+/* Temalar */
+body.space{background:radial-gradient(circle at 20% 20%, #020024, #0f1b3b)}
+body.gradient{background:linear-gradient(135deg,#667eea,#764ba2)}
+body.wave{background:linear-gradient(135deg,#43cea2,#185a9d)}
+body.stars{background:radial-gradient(circle at 10% 10%, #0b1220,#203a43,#2c5364)}
+body.light{background:#f7fafc;color:#0b1220}
+body.dark{background:#0b1220;color:#e6eef8}
