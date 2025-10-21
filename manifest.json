@@ -1,14 +1,21 @@
 {
-  "name": "Zaman Merkezi",
+  "name": "ZAMAN MERKEZİ",
   "short_name": "ZamanMerkezi",
-  "description": "Dünya saatleri, kronometre, geri sayım ve alarm özellikleriyle gelişmiş saat uygulaması.",
-  "start_url": "index.html",
+  "description": "Saat, kronometre, geri sayım, dünya saatleri",
+  "start_url": "/index.html",
   "display": "standalone",
-  "background_color": "#111111",
-  "theme_color": "#111111",
-  "orientation": "portrait",
+  "background_color": "#0099cc",
+  "theme_color": "#0099cc",
   "icons": [
-    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
-    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png" }
+    {
+      "src": "/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
   ]
 }
