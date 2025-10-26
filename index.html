@@ -10,6 +10,10 @@
   <link rel="icon" href="icon-192.png" sizes="192x192" type="image/png">
   <link rel="apple-touch-icon" href="icon-512.png">
 
+  <!-- Google AdSense Script -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3214692314578267"
+     crossorigin="anonymous"></script>
+
   <style>
     body {
       font-family: "Segoe UI", sans-serif;
@@ -47,6 +51,30 @@
       outline: none;
       font-size: 14px;
     }
+
+    /* ===== Reklam Alanları ===== */
+    .adsbygoogle {
+      margin: 15px 0;           /* Üst ve alt boşluk */
+      border-radius: 12px;       /* Hafif yuvarlak köşeler */
+      overflow: hidden;           /* Taşmaları engeller */
+    }
+
+    /* Mobil uyumlu genişlik */
+    @media (max-width: 480px) {
+      .adsbygoogle {
+        width: 100% !important;  /* Ekrana tam oturur */
+        display: block !important;
+      }
+    }
+
+    /* Masaüstü için maksimum genişlik */
+    @media (min-width: 481px) {
+      .adsbygoogle {
+        max-width: 400px;        /* Reklam container genişliği */
+        margin-left: auto;
+        margin-right: auto;      /* Ortalanmış görünüm */
+      }
+    }
   </style>
 </head>
 <body>
@@ -55,6 +83,17 @@
   <div class="section" id="clock">
     <h2>🕒 Saat</h2>
     <div id="time"></div>
+
+    <!-- Reklam Alanı 1: Saat Altı -->
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-3214692314578267"
+         data-ad-slot="9498310595"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>
+         (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
   </div>
 
   <div class="section" id="chronometer">
@@ -63,6 +102,17 @@
     <button id="startChrono">Başlat</button>
     <button id="stopChrono">Durdur</button>
     <button id="resetChrono">Sıfırla</button>
+
+    <!-- Reklam Alanı 2: Kronometre Altı -->
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-3214692314578267"
+         data-ad-slot="9498310595"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>
+         (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
   </div>
 
   <div class="section" id="countdown">
@@ -73,6 +123,17 @@
     <button id="startCount">Başlat</button>
     <button id="stopCount">Durdur</button>
     <button id="resetCount">Sıfırla</button>
+
+    <!-- Reklam Alanı 3: Geri Sayım Altı -->
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-3214692314578267"
+         data-ad-slot="9498310595"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>
+         (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
   </div>
 
   <div class="section" id="notes">
@@ -132,7 +193,6 @@
         if (remaining-- <= 0) {
           clearInterval(countdownInterval);
           countDisplay.textContent = "00:00";
-          // Bildirim gönder
           if (Notification.permission === "granted") {
             navigator.serviceWorker.ready.then(reg => {
               reg.showNotification("Geri Sayım Bitti! ⏰", {
