@@ -10,9 +10,8 @@
   <link rel="icon" href="icon-192.png" sizes="192x192" type="image/png">
   <link rel="apple-touch-icon" href="icon-512.png">
 
-  <!-- Google AdSense Script -->
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3214692314578267"
-     crossorigin="anonymous"></script>
+  <!-- Google AdSense -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3214692314578267" crossorigin="anonymous"></script>
 
   <style>
     body {
@@ -21,6 +20,7 @@
       color: white;
       margin: 0; padding: 0;
       text-align: center;
+      padding-bottom: 80px; /* Alt sabit reklam için yer */
     }
     h1 { margin-top: 20px; }
     .section {
@@ -42,58 +42,33 @@
       margin: 5px;
     }
     textarea {
-      width: 100%;
-      height: 100px;
-      border-radius: 8px;
-      padding: 10px;
-      border: none;
-      resize: none;
-      outline: none;
+      width: 100%; height: 100px;
+      border-radius: 8px; padding: 10px;
+      border: none; resize: none; outline: none;
       font-size: 14px;
     }
 
-    /* ===== Reklam Alanları ===== */
-    .adsbygoogle {
-      margin: 15px 0;           /* Üst ve alt boşluk */
-      border-radius: 12px;       /* Hafif yuvarlak köşeler */
-      overflow: hidden;           /* Taşmaları engeller */
-    }
-
-    /* Mobil uyumlu genişlik */
-    @media (max-width: 480px) {
-      .adsbygoogle {
-        width: 100% !important;  /* Ekrana tam oturur */
-        display: block !important;
-      }
-    }
-
-    /* Masaüstü için maksimum genişlik */
-    @media (min-width: 481px) {
-      .adsbygoogle {
-        max-width: 400px;        /* Reklam container genişliği */
-        margin-left: auto;
-        margin-right: auto;      /* Ortalanmış görünüm */
-      }
+    /* SABİT ALT REKLAM */
+    #alt-reklam {
+      position: fixed;
+      bottom: 0; left: 0; width: 100%;
+      background: #111a; backdrop-filter: blur(10px);
+      padding: 5px 0;
+      z-index: 9999;
     }
   </style>
 </head>
+
 <body>
+
   <h1>⏰ ZAMAN MERKEZİ</h1>
 
   <div class="section" id="clock">
     <h2>🕒 Saat</h2>
     <div id="time"></div>
 
-    <!-- Reklam Alanı 1: Saat Altı -->
-    <ins class="adsbygoogle"
-         style="display:block"
-         data-ad-client="ca-pub-3214692314578267"
-         data-ad-slot="9498310595"
-         data-ad-format="auto"
-         data-full-width-responsive="true"></ins>
-    <script>
-         (adsbygoogle = window.adsbygoogle || []).push({});
-    </script>
+    <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-3214692314578267" data-ad-slot="4615134092" data-ad-format="auto" data-full-width-responsive="true"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
   </div>
 
   <div class="section" id="chronometer">
@@ -103,16 +78,8 @@
     <button id="stopChrono">Durdur</button>
     <button id="resetChrono">Sıfırla</button>
 
-    <!-- Reklam Alanı 2: Kronometre Altı -->
-    <ins class="adsbygoogle"
-         style="display:block"
-         data-ad-client="ca-pub-3214692314578267"
-         data-ad-slot="9498310595"
-         data-ad-format="auto"
-         data-full-width-responsive="true"></ins>
-    <script>
-         (adsbygoogle = window.adsbygoogle || []).push({});
-    </script>
+    <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-3214692314578267" data-ad-slot="9795308589" data-ad-format="auto" data-full-width-responsive="true"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
   </div>
 
   <div class="section" id="countdown">
@@ -124,16 +91,8 @@
     <button id="stopCount">Durdur</button>
     <button id="resetCount">Sıfırla</button>
 
-    <!-- Reklam Alanı 3: Geri Sayım Altı -->
-    <ins class="adsbygoogle"
-         style="display:block"
-         data-ad-client="ca-pub-3214692314578267"
-         data-ad-slot="9498310595"
-         data-ad-format="auto"
-         data-full-width-responsive="true"></ins>
-    <script>
-         (adsbygoogle = window.adsbygoogle || []).push({});
-    </script>
+    <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-3214692314578267" data-ad-slot="8033959761" data-ad-format="auto" data-full-width-responsive="true"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
   </div>
 
   <div class="section" id="notes">
@@ -142,93 +101,31 @@
     <button id="saveNote">Kaydet</button>
   </div>
 
-  <script>
-    // ⏰ Gerçek saat
-    function updateClock() {
-      document.getElementById("time").textContent = new Date().toLocaleTimeString("tr-TR");
-    }
-    setInterval(updateClock, 1000);
-    updateClock();
+  <!-- ✅ SABİT ALT REKLAM -->
+  <div id="alt-reklam">
+    <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-3214692314578267" data-ad-slot="4615134092" data-ad-format="horizontal" data-full-width-responsive="true"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+  </div>
 
-    // ⏱ Kronometre
-    let chronoStartTime = 0, chronoInterval, chronoRunning = false;
-    const display = document.getElementById("chrono-display");
-    document.getElementById("startChrono").onclick = () => {
-      if (!chronoRunning) {
-        chronoStartTime = Date.now() - (chronoStartTime || 0);
-        chronoInterval = setInterval(() => {
-          const elapsed = Date.now() - chronoStartTime;
-          const ms = String(elapsed % 1000).padStart(3, "0");
-          const s = String(Math.floor(elapsed / 1000) % 60).padStart(2, "0");
-          const m = String(Math.floor(elapsed / 60000) % 60).padStart(2, "0");
-          const h = String(Math.floor(elapsed / 3600000)).padStart(2, "0");
-          display.textContent = `${h}:${m}:${s}.${ms}`;
-        }, 10);
-        chronoRunning = true;
-      }
-    };
-    document.getElementById("stopChrono").onclick = () => {
-      clearInterval(chronoInterval);
-      chronoRunning = false;
-    };
-    document.getElementById("resetChrono").onclick = () => {
-      clearInterval(chronoInterval);
-      chronoStartTime = 0;
-      display.textContent = "00:00:00.000";
-      chronoRunning = false;
-    };
+<script>
+  function updateClock(){document.getElementById("time").textContent=new Date().toLocaleTimeString("tr-TR");}
+  setInterval(updateClock,1000); updateClock();
 
-    // ⏳ Geri Sayım
-    let countdownInterval, remaining = 0;
-    const countDisplay = document.getElementById("countDisplay");
-    document.getElementById("startCount").onclick = () => {
-      const mins = +document.getElementById("countMinutes").value || 0;
-      const secs = +document.getElementById("countSeconds").value || 0;
-      remaining = mins * 60 + secs;
-      clearInterval(countdownInterval);
-      countdownInterval = setInterval(() => {
-        const m = String(Math.floor(remaining / 60)).padStart(2, "0");
-        const s = String(remaining % 60).padStart(2, "0");
-        countDisplay.textContent = `${m}:${s}`;
-        if (remaining-- <= 0) {
-          clearInterval(countdownInterval);
-          countDisplay.textContent = "00:00";
-          if (Notification.permission === "granted") {
-            navigator.serviceWorker.ready.then(reg => {
-              reg.showNotification("Geri Sayım Bitti! ⏰", {
-                body: "Süren doldu!",
-                icon: "icon-192.png"
-              });
-            });
-          }
-        }
-      }, 1000);
-    };
-    document.getElementById("stopCount").onclick = () => clearInterval(countdownInterval);
-    document.getElementById("resetCount").onclick = () => {
-      clearInterval(countdownInterval);
-      countDisplay.textContent = "00:00";
-    };
+  let chronoStartTime=0,chronoInterval,chronoRunning=false,display=document.getElementById("chrono-display");
+  startChrono.onclick=()=>{if(!chronoRunning){chronoStartTime=Date.now()-(chronoStartTime||0);chronoInterval=setInterval(()=>{const e=Date.now()-chronoStartTime,ms=String(e%1000).padStart(3,"0"),s=String(Math.floor(e/1000)%60).padStart(2,"0"),m=String(Math.floor(e/60000)%60).padStart(2,"0"),h=String(Math.floor(e/3600000)).padStart(2,"0");display.textContent=`${h}:${m}:${s}.${ms}`;},10);chronoRunning=true;}};
+  stopChrono.onclick=()=>{clearInterval(chronoInterval);chronoRunning=false;};
+  resetChrono.onclick=()=>{clearInterval(chronoInterval);chronoStartTime=0;display.textContent="00:00:00.000";chronoRunning=false;};
 
-    // 📝 Not Defteri
-    const noteArea = document.getElementById("noteArea");
-    noteArea.value = localStorage.getItem("note") || "";
-    document.getElementById("saveNote").onclick = () => {
-      localStorage.setItem("note", noteArea.value);
-      alert("Not kaydedildi ✅");
-    };
+  let countdownInterval,remaining=0,countDisplay=document.getElementById("countDisplay");
+  startCount.onclick=()=>{const mins=+countMinutes.value||0,secs=+countSeconds.value||0;remaining=mins*60+secs;clearInterval(countdownInterval);countdownInterval=setInterval(()=>{const m=String(Math.floor(remaining/60)).padStart(2,"0"),s=String(remaining%60).padStart(2,"0");countDisplay.textContent=`${m}:${s}`;if(remaining--<=0){clearInterval(countdownInterval);countDisplay.textContent="00:00";}},1000);};
+  stopCount.onclick=()=>clearInterval(countdownInterval);
+  resetCount.onclick=()=>{clearInterval(countdownInterval);countDisplay.textContent="00:00";};
 
-    // 🔔 Bildirim izni
-    if ('Notification' in window && Notification.permission !== 'granted') {
-      Notification.requestPermission();
-    }
+  const noteArea=document.getElementById("noteArea");
+  noteArea.value=localStorage.getItem("note")||"";
+  saveNote.onclick=()=>{localStorage.setItem("note",noteArea.value);alert("Not kaydedildi ✅");};
 
-    // ✅ Service Worker kaydı
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('/push-sw.js')
-        .then(reg => console.log('Service Worker aktif:', reg.scope))
-        .catch(err => console.warn('SW hatası:', err));
-    }
-  </script>
+</script>
+
 </body>
 </html>
